@@ -421,3 +421,42 @@ table.responsiv.is-stacked .sirka-30 {
    JS provides; without JS those wouldn't exist, so cells would show
    values with no labels. Without JS, the safer fallback is simply a
    normal, fully labeled HTML table. */
+
+/* Print: on a narrower printable area a card can still be "stacked",
+   and --rwd-card-shadow (or the scroll-shadow indicators) render as
+   flat grey bands on paper — visual affordances that only make sense
+   on screen. Let the wrap show its full content (no clipped/scrolled
+   overflow on paper) and drop every shadow; keep each card's border
+   as a plain print-friendly rule, and avoid splitting one card's row
+   across a page break where possible. */
+@media print {
+  .rwd-table-wrap {
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+
+  .rwd-table-wrap table.responsiv,
+  table.responsiv {
+    border-collapse: collapse;
+  }
+
+  .rwd-table-wrap.is-stacked table.responsiv tr,
+  table.responsiv.is-stacked tr {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+
+/* Windows High Contrast / forced-colors mode: the --rwd-border custom
+   property (and any other author color) is ignored by the browser in
+   this mode for most properties, but border-color is one a page can
+   still set meaningfully — CanvasText keeps the grid lines visible
+   and consistent with surrounding forced-colors text instead of
+   disappearing or rendering as a default that doesn't match. */
+@media (forced-colors: active) {
+  table.responsiv,
+  table.responsiv th,
+  table.responsiv td {
+    border-color: CanvasText;
+  }
+}

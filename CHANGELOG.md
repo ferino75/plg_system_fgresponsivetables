@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.15
+- Added print styles: `--rwd-card-shadow` and the scroll-shadow indicators render as flat grey bands on paper (a screen-only affordance), so `@media print` now drops all box-shadows, lets `.rwd-table-wrap` show its full content instead of a clipped/scrollable overflow, and asks each stacked card's row not to split across a page break (`break-inside: avoid`) where the printer/browser honours it.
+- Added a `@media (forced-colors: active)` rule (Windows High Contrast and similar modes) setting `border-color: CanvasText` on the table and its cells, so the grid lines stay visible and consistent with surrounding forced-colors text instead of disappearing.
+- Verified the print rules via headless render with `page.emulateMediaType('print')`: a card's `box-shadow` goes from the normal `rgba(0,0,0,0.08) 0 1px 3px` to `none`, the wrap's `overflow-x` goes from `auto` to `visible`, and `break-inside: avoid` applies — all only in print, screen rendering unaffected. The `forced-colors` rule could not be verified the same way (the headless Chrome build available in this environment doesn't support emulating that media feature) — CSS syntax is unambiguous and the file parses/loads correctly, but this specific rule should get a real screen-reader/high-contrast pass before being treated as fully confirmed.
+
 ## 2.0.14
 - Fixed a WCAG 1.4.4 accessibility issue from the same external analysis: `table.responsiv { font-size: 15px }` used an absolute pixel value, overriding the user's browser base font-size setting instead of scaling with it. Changed to `0.9375rem` (equal to 15px only at the default 16px root size, but now genuinely scales). `legacy.css`'s `1.15rem` was already rem-based and needed no change.
 - Fixed a manifest hygiene issue: none of the plugin's seven `radio` fields nor its one `list` field (`card_style`) had `validate="options"` — the core convention (e.g. `plg_system_httpheaders`) that stops an out-of-range value from ever being saved. `card_style` also had no `filter` at all; added `filter="cmd"`.
