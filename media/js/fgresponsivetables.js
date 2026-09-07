@@ -20,6 +20,7 @@
     clearFloats: false,
     minWidth: 0,
     scrollLabel: "Scrollable table",
+    watchDom: false,
     exclude: "table.no-responsiv, .no-responsiv table",
   };
 
@@ -499,4 +500,45 @@
   }
 
   window.rwdTablesEnhance = enhance;
+
+  /**
+   * Off by default. enhance() only ever runs once (DOMContentLoaded)
+   * plus whenever a page calls window.rwdTablesEnhance() itself —
+   * fine for ordinary content, but a table injected later by AJAX
+   * (Regular Labs Tabs/Accordion lazy load, SP Page Builder, a custom
+   * fetch) is never touched unless whoever built that integration
+   * happens to know about the manual escape hatch. A MutationObserver
+   * on the whole document catches that automatically, at the cost of
+   * watching document.body on every single page even where nothing
+   * ever loads dynamically — worth it for sites that need it, not a
+   * sensible default for every install. Turned on via the plugin's
+   * "Watch for dynamically added tables" setting. data-rwd-ready
+   * already makes repeated enhance() calls safe (a no-op for tables
+   * already processed), so this can call it as often as it likes.
+   */
+  if (getOptions().watchDom && typeof MutationObserver !== "undefined") {
+    var mo = new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var node = added[j];
+          if (node.nodeType === 1 && (node.tagName === "TABLE" || node.querySelector("table"))) {
+            if (window.requestIdleCallback) {
+              requestIdleCallback(enhance);
+            } else {
+              setTimeout(enhance, 0);
+            }
+            return;
+          }
+        }
+      }
+    });
+    if (document.body) {
+      mo.observe(document.body, { childList: true, subtree: true });
+    } else {
+      document.addEventListener("DOMContentLoaded", function () {
+        mo.observe(document.body, { childList: true, subtree: true });
+      });
+    }
+  }
 })();

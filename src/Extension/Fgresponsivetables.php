@@ -89,6 +89,7 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             'clearFloats' => (int) $this->params->get('clear_floats', 0) === 1,
             'minWidth'    => (int) $this->params->get('min_width', 0),
             'scrollLabel' => Text::_('PLG_SYSTEM_FGRESPONSIVETABLES_SCROLL_REGION'),
+            'watchDom'    => (int) $this->params->get('watch_dom', 0) === 1,
             'exclude'     => (string) $this->params->get('exclude', 'table.no-responsiv, .no-responsiv table'),
         ]);
     }

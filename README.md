@@ -63,6 +63,7 @@ See `README.txt` (Slovak) for the full list of helper classes, including the opt
 | Breakpoint (px) | 600 | Below this wrapper width, the table stacks into cards |
 | Minimum table width (px) | 0 (off) | Forces horizontal scroll (instead of squeezed columns) in the width band between the breakpoint and full width — a non-stacked `table-layout:auto` table otherwise shrinks columns rather than overflows, so the scroll-shadow/keyboard-focus logic never gets a chance to activate |
 | Load legacy compatible styles | On | Load `legacy.css` (`.day-content`, `.sirka-*`, `.col-w-md-*`, ...) — turn off on a new/unrelated site, these class names are generic |
+| Watch for dynamically added tables | Off | Enables a `MutationObserver` so a table added later via AJAX (lazy-loaded tabs/accordion, SP Page Builder, a custom fetch) is picked up automatically instead of needing a manual `window.rwdTablesEnhance()` call — costs watching the page continuously, so it's opt-in |
 
 ## License
 
