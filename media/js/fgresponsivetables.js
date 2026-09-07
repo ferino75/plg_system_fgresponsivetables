@@ -131,6 +131,38 @@
   }
 
   /**
+   * headerLabels() already has a fallback for a table with no real
+   * <thead> — common straight out of TinyMCE, where the author just
+   * types `<tr><th>...</th></tr>` as the first row inside <tbody>.
+   * That fallback correctly reads labels from it, but nothing told
+   * the CSS this row is a header, so in stacked mode it rendered as
+   * its own empty-looking card (two <th> cells side by side) — and
+   * nothing told applyAriaRoles() either, so those cells got
+   * role="rowheader"/scope="row" (a row header) instead of the
+   * column-header role they actually are. Mark it once here so both
+   * the CSS (.rwd-headrow, hidden the same way as a real thead) and
+   * applyAriaRoles() (checked via this class) can treat it correctly.
+   * A real <thead> needs none of this — it's already handled on its
+   * own throughout.
+   */
+  function markHeaderRow(table) {
+    if (table.tHead) {
+      return;
+    }
+    var first = table.rows[0];
+    if (!first || !first.cells.length) {
+      return;
+    }
+    var allTh = Array.prototype.every.call(first.cells, function (cell) {
+      return cell.tagName === "TH";
+    });
+    if (allTh) {
+      first.classList.add("rwd-headrow");
+    }
+  }
+
+
+  /**
    * Known limitation: this advances the column pointer by a body
    * cell's own colspan (so a <td colspan="2"> correctly pushes later
    * cells in the SAME row to the right column), but does not track
@@ -248,7 +280,7 @@
         row.setAttribute("role", "row");
       }
 
-      var inHead = row.parentElement === table.tHead;
+      var inHead = row.parentElement === table.tHead || row.classList.contains("rwd-headrow");
       Array.prototype.forEach.call(row.cells, function (cell) {
         if (cell.tagName === "TH") {
           if (!cell.hasAttribute("role")) {
@@ -391,6 +423,8 @@
         return;
       }
       table.setAttribute("data-rwd-ready", "1");
+
+      markHeaderRow(table);
 
       if (opts.autoLabels !== false) {
         applyLabels(table);

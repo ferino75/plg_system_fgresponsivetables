@@ -213,6 +213,27 @@ table.responsiv.is-stacked thead {
   white-space: nowrap;
 }
 
+/* Same visually-hidden treatment for a header row markHeaderRow()
+   found sitting directly in tbody with no real <thead> around it
+   (see the JS comment on markHeaderRow for why this is needed) —
+   without this it would otherwise render as its own near-empty card
+   of bare <th> cells in stacked mode. */
+.rwd-table-wrap.is-stacked table.responsiv tr.rwd-headrow,
+table.responsiv.is-stacked tr.rwd-headrow {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+}
+
 /* tr/td below are switched to display:block, but tbody itself was
    left as native table-row-group — that mismatch confuses the
    table's auto layout algorithm and can make tbody (and so every
