@@ -263,7 +263,7 @@ table.responsiv.is-stacked tbody tr:nth-child(even) {
 .rwd-table-wrap.is-stacked table.responsiv td,
 table.responsiv.is-stacked td {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
   align-items: baseline;
   column-gap: 0.75em;
   font-size: 0.95em;
@@ -286,23 +286,39 @@ table.responsiv.is-stacked td:nth-child(even) {
 }
 
 /* Label + value as two real grid items (JS wraps the value in
-   span.rwd-value). The label sits in the flexible 1fr column and can
-   wrap onto a second line if it's long; the value sits in its own
-   auto-sized column and never wraps or moves — this is what actually
-   fixes the old float's long-label collision (e.g. "Cena za 1 hod.
-   nad paušál (min. 3 hod.)"), not just a visual tweak. Grid gives
-   each piece its own track, so — unlike float or flex-basis tricks —
-   there's no code path where they can end up sharing a line. */
+   span.rwd-value). The label sits in the flexible first column and
+   can wrap onto a second line if it's long; the value sits in its
+   own column on the right. Both tracks use minmax(0, ...) and the
+   value gets min-width:0 — without that, a grid track's default
+   minimum is its content's min-content size, so a long unwrapped
+   value (a sentence, a note — not just a short price) would force
+   the column wider than the card and overflow it sideways, exactly
+   what plain "auto" silently allowed. Grid still gives label and
+   value their own track each, so — unlike float or flex-basis
+   tricks — there's no code path where they end up sharing a line. */
 .rwd-table-wrap.is-stacked table.responsiv td[data-label]::before,
 table.responsiv.is-stacked td[data-label]::before {
   content: attr(data-label);
   font-weight: 700;
   color: var(--rwd-label);
+  min-width: 0;
 }
 
 .rwd-table-wrap.is-stacked table.responsiv td .rwd-value,
 table.responsiv.is-stacked td .rwd-value {
   text-align: right;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Opt-in: add class="rwd-nowrap" to a <td> whose value is always
+   short (a price, a code) and should never wrap even if the label
+   next to it is long. Not automatic — a content author adds it
+   per-cell, since whether a value "should" wrap is a content
+   decision this plugin can't infer reliably. */
+.rwd-table-wrap.is-stacked table.responsiv td.rwd-nowrap .rwd-value,
+table.responsiv.is-stacked td.rwd-nowrap .rwd-value {
   white-space: nowrap;
 }
 

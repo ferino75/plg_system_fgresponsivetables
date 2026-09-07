@@ -38,6 +38,14 @@ Tabuľku, ktorá sa nemá skladať:
 
   <table class="no-responsiv">...</table>
 
+Bunku, ktorej hodnota je vždy krátka (cena, kód) a nemá sa
+zalomiť ani vedľa dlhého popisku:
+
+  <td class="rwd-nowrap" data-label="Cena">195,-€</td>
+
+(Predvolene sa hodnota v mobilnej karte smie zalomiť — to je
+bezpečnejšie pre dlhší text, napr. poznámku.)
+
 Pomocné triedy (zachované z pôvodného CSS, len v legacy.css)
 --------------------------------------------------------------
   sirka-25, sirka-30
