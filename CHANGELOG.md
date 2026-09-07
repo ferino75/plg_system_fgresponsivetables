@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.24
+- Fixed one more split point in the changelog display, found live: Joomla's changelog viewer breaks a single item into separate bullets at em/en dashes too, not just ampersands. changelog.xml's generator now replaces every em dash and en dash with a comma across all entries.
+
 ## 2.0.23
 - Fixed the changelog display for real this time, confirmed broken live again by 2.0.22's own fix: my 2.0.22 changelog entry described the escaping syntax literally (spelling out the entity codes as prose using the ampersand character itself), and that one character hit the exact same underlying problem the entry was describing — Joomla's changelog viewer doesn't re-escape item text before handing it to the browser, so any ampersand in the content gets interpreted as the start of an HTML entity, and the bullet shredded into fragments around each one, same as the tag-name bug did before it.
 - changelog.xml's generator now also replaces every literal ampersand character in the source text with the word "and" (in addition to stripping angle-bracket tag references) — so no ampersand of any kind, entity-shaped or not, ever reaches the output. The 2.0.22 entry above was also rewritten to stop describing the escaping syntax using the character itself, since that's what triggered this in the first place.
