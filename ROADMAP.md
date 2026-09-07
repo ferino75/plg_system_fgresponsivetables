@@ -1,22 +1,36 @@
 # Roadmap
 
-## Resolved: `<changelogurl>` — was our wrong schema, not a Joomla bug
+## Resolved: `<changelogurl>` — confirmed working (v2.0.24)
 
-Tried in 2.0.18–2.0.20, reverted as apparently blocked by a Joomla
-core bug (dynamic properties on `Changelog.php`, PHP 8.2 deprecation).
-That diagnosis was wrong: the actual `<changelog>` entry schema
-(confirmed against Joomla's own documentation,
-manual.joomla.org/docs/building-extensions/install-update/installation/change-log)
-uses singular category tags — `<fix>`, `<addition>`, `<change>`,
-`<remove>`, `<security>`, `<language>`, `<note>` — each containing
-plain `<item>` children, plus `<element>`/`<type>`/`<version>`. What
-was actually shipped in 2.0.18/2.0.19 (`<fixes><fix title="...">`,
-`<name>`, `<description>`) doesn't match that schema at all — none of
-those are real properties on the `Changelog` class, which is exactly
-why they triggered the "dynamic property" deprecation. Re-added in
-2.0.21 with the corrected schema. **Needs a second live confirmation**
-on the real site before fully trusting it — the first two attempts
-both looked fine locally and both failed in production.
+Took five attempts (2.0.18–2.0.24) to get right, all found via live
+testing on the real production site, not local checks:
+
+1. **2.0.18/2.0.19** — used an invented, wrong `<changelog>` schema
+   (`<fixes><fix title="...">`, `<name>`, `<description>`), causing
+   PHP 8.2 "dynamic property" deprecation warnings in Joomla's
+   `Changelog` class. Looked like a Joomla core bug at first, wasn't.
+2. **2.0.20** — reverted the whole feature on that (wrong) diagnosis.
+3. **2.0.21** — re-added with the actually-correct schema per
+   Joomla's own docs (manual.joomla.org): `<element>`/`<type>`/
+   `<version>`, then singular category tags (`<fix>`, `<addition>`,
+   `<change>`, `<remove>`, `<security>`, `<language>`, `<note>`) each
+   containing plain `<item>` children. No more PHP errors, but the
+   changelog modal rendered as meaningless one-word bullets.
+4. **2.0.22/2.0.23** — Joomla's changelog viewer doesn't re-escape
+   item text before handing it to the browser, so literal `<tag>`
+   references AND literal `&` characters in the source text both got
+   interpreted as real HTML (tags / entities) and shredded the
+   bullet. Fixed by stripping angle-bracket tag references down to
+   their bare text and replacing every ampersand with the word "and"
+   before escaping.
+5. **2.0.24** — the same viewer also splits a single item into
+   separate bullets at em/en dashes. Fixed by replacing those with
+   commas.
+
+Confirmed live: a full multi-sentence bullet now displays as one
+continuous, readable list item. `changelog.xml`'s generator (in the
+release script, not committed as a standalone tool) sanitizes
+`CHANGELOG.md` bullets through all of the above before escaping.
 
 ## 3.0 — Container queries instead of ResizeObserver
 
