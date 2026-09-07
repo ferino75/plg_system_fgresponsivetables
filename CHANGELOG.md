@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.16
+- Reverted 2.0.14's `font-size: 0.9375rem` back to `font-size: 15px` on `table.responsiv` — confirmed as a real regression on the actual production site (mechanizmysevcik.sk/cennik): `rem` is relative to the `<html>` root element's font-size, and this site's template (T3 Framework / Bootstrap 3, `theme3556`) evidently resets that root size to something well below the usual 16px default — a very common pattern in older Bootstrap 3 templates. The result was noticeably smaller table text than before, not the intended "same size at default, scales with user preference" outcome.
+- The WCAG 1.4.4 motivation for 2.0.14 wasn't wrong in principle, but a relative unit is only actually more accessible if it reliably resolves to a sensible size — here it silently produced a worse, smaller result on a real site than the plain pixel value it replaced. A fixed 15px still respects a user's browser zoom (which scales pixel values too in every modern browser); reverting to it is the safer, predictable choice given the direct evidence of breakage, rather than defending a partial accessibility gain that made real reading harder.
+- Verified via headless render: with the page's root font-size forced to 20px (the same test used to confirm 2.0.14's scaling), the table's computed font-size is now 15px regardless — matching the pre-2.0.14 behaviour exactly, on any host page irrespective of what it sets on `<html>`.
+
 ## 2.0.15
 - Added print styles: `--rwd-card-shadow` and the scroll-shadow indicators render as flat grey bands on paper (a screen-only affordance), so `@media print` now drops all box-shadows, lets `.rwd-table-wrap` show its full content instead of a clipped/scrollable overflow, and asks each stacked card's row not to split across a page break (`break-inside: avoid`) where the printer/browser honours it.
 - Added a `@media (forced-colors: active)` rule (Windows High Contrast and similar modes) setting `border-color: CanvasText` on the table and its cells, so the grid lines stay visible and consistent with surrounding forced-colors text instead of disappearing.
