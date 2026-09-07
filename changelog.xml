@@ -3,10 +3,20 @@
 	<changelog>
 		<element>fgresponsivetables</element>
 		<type>plugin</type>
+		<version>2.0.23</version>
+		<fix>
+			<item>Fixed the changelog display for real this time, confirmed broken live again by 2.0.22's own fix: my 2.0.22 changelog entry described the escaping syntax literally (spelling out the entity codes as prose using the ampersand character itself), and that one character hit the exact same underlying problem the entry was describing — Joomla's changelog viewer doesn't re-escape item text before handing it to the browser, so any ampersand in the content gets interpreted as the start of an HTML entity, and the bullet shredded into fragments around each one, same as the tag-name bug did before it.</item>
+			<item>changelog.xml's generator now also replaces every literal ampersand character in the source text with the word "and" (in addition to stripping angle-bracket tag references) — so no ampersand of any kind, entity-shaped or not, ever reaches the output. The 2.0.22 entry above was also rewritten to stop describing the escaping syntax using the character itself, since that's what triggered this in the first place.</item>
+			<item>Not yet re-confirmed live.</item>
+		</fix>
+	</changelog>
+	<changelog>
+		<element>fgresponsivetables</element>
+		<type>plugin</type>
 		<version>2.0.22</version>
 		<fix>
-			<item>Fixed the changelog display itself, confirmed broken live (no PHP errors this time — the modal opened, but content was shredded into meaningless one-word bullets). Cause: several CHANGELOG.md bullets reference literal HTML/XML tag names in backticks ( changelogurl ,  fix , etc.); these were correctly XML-escaped as &amp;lt;...&amp;gt; for changelog.xml, but Joomla's changelog viewer decodes them back to real / before displaying, and the browser then parses changelogurl etc. as actual (unknown) HTML tags — splitting the bullet into fragments around them instead of showing it as one line.</item>
-			<item>changelog.xml's generator now strips any ... span down to its bare inner text before escaping ( changelogurl  → changelogurl), so no tag-like angle-bracket pairs remain in the output at all. A few standalone &amp;gt; characters remain (CSS td &gt; a, PHP $this-&gt;method()) — those are safe on their own, since a lone &gt; with no matching &lt; doesn't start a tag.</item>
+			<item>Fixed the changelog display itself, confirmed broken live (no PHP errors this time — the modal opened, but content was shredded into meaningless one-word bullets). Cause: several CHANGELOG.md bullets reference literal HTML/XML tag names in backticks (changelogurl, fix, etc.); these were correctly escaped for the XML file, but Joomla's changelog viewer decodes that escaping back to real angle brackets before displaying, and the browser then parses the tag names as actual (unknown) HTML elements — splitting the bullet into fragments around them instead of showing it as one line.</item>
+			<item>changelog.xml's generator now strips any bracketed tag reference down to its bare inner text before escaping (a backtick-quoted changelogurl tag name becomes just the word changelogurl), so no tag-like angle-bracket pairs remain in the output at all. A few standalone greater-than signs remain from code snippets (CSS child selectors, a PHP method call) — those are safe on their own, since one alone with nothing matching it before doesn't start a tag.</item>
 			<item>Not yet re-confirmed live for actual readability (only the "no more shredded bullets" fix is new here) — please check once more.</item>
 		</fix>
 	</changelog>
