@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.19
+- Fixed PHP 8.2+ deprecation warnings reported live on the changelog display (Joomla's own `Changelog.php` class, tracked upstream as joomla-cms#41635): `<maintainer>`, `<maintainerurl>`, `<targetplatformversion>`, `<targetplatformname>`, and `<client>` inside a `<changelog>` entry aren't declared properties on that class, so Joomla was setting them as dynamic properties — deprecated since PHP 8.2. Those five elements weren't part of the actual `<changelog>` schema (I'd added them based on the `<update>` schema in `updates.xml`, which does support them, without verifying the `<changelog>` entry schema is different); removed them. `changelog.xml` entries now only use `<version>`, `<name>`, `<description>`, and `<fixes>`/`<fix>`, which don't trigger the warning.
+
 ## 2.0.18
 - Added `<changelogurl>` to the manifest and to `updates.xml`, pointing at a new `changelog.xml` (Joomla's own changelog XML format) hosted at the repo root — Joomla's Extensions Manager can now show the changelog directly in the update screen instead of sending someone to GitHub. `changelog.xml` is generated from `CHANGELOG.md` itself (one `<changelog>` entry per version, each bullet as a `<fix>`), so it stays in sync with the same source of truth rather than being maintained twice by hand.
 - `build-check.sh` now also checks `changelog.xml`'s newest entry against the other three version sources before allowing a package/tag.

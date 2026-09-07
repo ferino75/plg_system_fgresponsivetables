@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelogs>
 	<changelog>
+		<version>2.0.19</version>
+		<name>FG Responsive Tables</name>
+		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
+		<fixes>
+			<fix title="Fixed PHP 8.2+ deprecation warnings reported live on the changelog display (Joomla&apos;s own Changelo...">Fixed PHP 8.2+ deprecation warnings reported live on the changelog display (Joomla's own Changelog.php class, tracked upstream as joomla-cms#41635): &lt;maintainer&gt;, &lt;maintainerurl&gt;, &lt;targetplatformversion&gt;, &lt;targetplatformname&gt;, and &lt;client&gt; inside a &lt;changelog&gt; entry aren't declared properties on that class, so Joomla was setting them as dynamic properties — deprecated since PHP 8.2. Those five elements weren't part of the actual &lt;changelog&gt; schema (I'd added them based on the &lt;update&gt; schema in updates.xml, which does support them, without verifying the &lt;changelog&gt; entry schema is different); removed them. changelog.xml entries now only use &lt;version&gt;, &lt;name&gt;, &lt;description&gt;, and &lt;fixes&gt;/&lt;fix&gt;, which don't trigger the warning.</fix>
+		</fixes>
+	</changelog>
+	<changelog>
 		<version>2.0.18</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -16,11 +19,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.17</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -30,11 +28,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.16</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -45,11 +38,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.15</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -60,11 +48,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.14</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -75,11 +58,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.13</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -91,11 +69,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.12</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -106,11 +79,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.11</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -122,11 +90,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.10</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -137,11 +100,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.9</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -153,11 +111,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.8</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -169,11 +122,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.7</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -184,11 +132,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.6</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -199,11 +142,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.5</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -214,11 +152,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.4</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -229,11 +162,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.3</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -245,11 +173,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.2</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -260,11 +183,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.1</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
@@ -273,11 +191,6 @@
 	</changelog>
 	<changelog>
 		<version>2.0.0</version>
-		<maintainer>Fero</maintainer>
-		<maintainerurl>https://github.com/ferino75</maintainerurl>
-		<targetplatformversion><![CDATA[[456]\..*]]></targetplatformversion>
-		<targetplatformname>joomla</targetplatformname>
-		<client>site</client>
 		<name>FG Responsive Tables</name>
 		<description>Joomla 4/5/6 system plugin that stacks wide content tables into labelled cards on narrow screens.</description>
 		<fixes>
