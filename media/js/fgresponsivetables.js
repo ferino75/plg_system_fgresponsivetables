@@ -328,7 +328,11 @@
     if (parent && parent.classList.contains("rwd-table-wrap")) {
       return parent;
     }
-    if (parent && parent.classList.contains("table-wrapper")) {
+    if (
+      parent &&
+      parent.classList.contains("table-wrapper") &&
+      parent.getElementsByTagName("table").length === 1
+    ) {
       parent.classList.add("rwd-table-wrap");
       return parent;
     }
@@ -390,6 +394,11 @@
   }
 
   function observeWidth(target, table, breakpoint, scrollLabel) {
+    if (target.getAttribute("data-rwd-observed") === "1") {
+      return;
+    }
+    target.setAttribute("data-rwd-observed", "1");
+
     var apply = function () {
       var width = target.getBoundingClientRect().width;
       target.classList.toggle("is-stacked", width > 0 && width <= breakpoint);
