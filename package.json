@@ -1,0 +1,12 @@
+{
+  "name": "plg_system_fgresponsivetables-tests",
+  "private": true,
+  "description": "Dev-only dependency for the Playwright regression suite in tests/. Not part of the installed Joomla plugin.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}

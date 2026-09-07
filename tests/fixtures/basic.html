@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="sk-sk" dir="ltr">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../media/css/fgresponsivetables.css">
+<style>body { margin: 0; padding: 8px; font-family: sans-serif; }</style>
+</head>
+<body>
+
+<!-- 1. Simple table: baseline regression check -->
+<table class="responsiv" id="t-simple">
+<thead><tr><th>Model</th><th>Cena</th></tr></thead>
+<tbody><tr><td>AD08</td><td>195,-&euro;</td></tr></tbody>
+</table>
+
+<!-- 2. Long label vs. short value: the original v1.6.0 CSS Grid fix -->
+<table class="responsiv" id="t-long-label">
+<thead><tr>
+<th>Mechanizmy &Scaron;ev&#269;&iacute;k s.r.o.</th>
+<th>Min. pau&scaron;&aacute;l 24 km a 3 hod.</th>
+<th>Cena za 1 km nad pau&scaron;&aacute;l</th>
+<th>Cena za 1 hod. nad pau&scaron;&aacute;l (min. 3 hod.)</th>
+</tr></thead>
+<tbody><tr><td>AD08</td><td>195,-&euro;</td><td>2.50,-&euro;</td><td>45,-&euro;</td></tr></tbody>
+</table>
+
+<!-- 3. Long value that must wrap without overflowing: v2.0.2 fix -->
+<table class="responsiv" id="t-long-value">
+<thead><tr><th>Model</th><th>Cena</th><th>Pozn&aacute;mka</th></tr></thead>
+<tbody><tr>
+<td>AD08</td><td>195,-&euro;</td>
+<td>Toto je dlh&aacute; textov&aacute; pozn&aacute;mka, ktor&aacute; by v p&ocirc;vodnej verzii pretiekla kartu von, preto&#382;e hodnota mala nastaven&eacute; white-space: nowrap bez oh&#318;adu na d&#297;&#382;ku obsahu skuto&#269;n&eacute;ho textu.</td>
+</tr></tbody>
+</table>
+
+<!-- 4. Value that should never wrap (opt-in) -->
+<table class="responsiv" id="t-nowrap">
+<thead><tr><th>Model</th><th>Ve&#318;mi dlh&yacute; n&aacute;zov st&#297;pca ktor&yacute; by mohol vytla&#269;i&#357; hodnotu</th></tr></thead>
+<tbody><tr><td>AD08</td><td class="rwd-nowrap">195,-&euro;</td></tr></tbody>
+</table>
+
+<!-- 5. Colspan/rowspan grouped header: v1.7.0 fix -->
+<table class="responsiv" id="t-colspan-header">
+<thead>
+<tr><th rowspan="2">Stroj</th><th colspan="2">Cena</th></tr>
+<tr><th>hodina</th><th>km</th></tr>
+</thead>
+<tbody>
+<tr><td>Tatra AD 28</td><td>45&nbsp;&euro;</td><td>2,50&nbsp;&euro;</td></tr>
+<tr><td>Tatra AD 20</td><td>50&nbsp;&euro;</td><td>2,50&nbsp;&euro;</td></tr>
+</tbody>
+</table>
+
+<!-- 6. Rowspan in the body shifting following-row labels: v2.0.5 fix -->
+<table class="responsiv" id="t-rowspan-body">
+<thead><tr><th>De&#328;</th><th>Stroj</th><th>Cena</th></tr></thead>
+<tbody>
+<tr><td rowspan="2">Pondelok</td><td>AD08</td><td>60&nbsp;&euro;</td></tr>
+<tr><td>AD20</td><td>70&nbsp;&euro;</td></tr>
+</tbody>
+</table>
+
+<!-- 7. <th scope="row"> as the first cell of a body row: v2.0.3 fix -->
+<table class="responsiv" id="t-th-scope-row">
+<thead><tr><th>Model</th><th>Min. pau&scaron;&aacute;l</th><th>Cena za km</th></tr></thead>
+<tbody>
+<tr><th scope="row">AD08</th><td>195,-&euro;</td><td>2.50,-&euro;</td></tr>
+<tr><th scope="row">AD20</th><td>210,-&euro;</td><td>2.50,-&euro;</td></tr>
+</tbody>
+</table>
+
+<!-- 8. No real <thead>, header row directly in tbody (TinyMCE-style): v2.0.4 fix -->
+<table class="responsiv" id="t-no-thead">
+<tbody>
+<tr><th>Model</th><th>Min. pau&scaron;&aacute;l</th><th>Cena za km</th></tr>
+<tr><td>AD08</td><td>195,-&euro;</td><td>2.50,-&euro;</td></tr>
+</tbody>
+</table>
+
+<!-- 9. <caption>: drives the aria-label of the scrollable region -->
+<table class="responsiv" id="t-caption">
+<caption>Cenn&iacute;k pren&aacute;jmu &#382;eriavov</caption>
+<thead><tr><th>Model</th><th>Cena</th></tr></thead>
+<tbody><tr><td>AD08</td><td>195,-&euro;</td></tr></tbody>
+</table>
+
+<!-- 10. Table nested inside a cell: v1.8.0 fix (outer must not touch inner) -->
+<table class="responsiv" id="t-outer-nested">
+<thead><tr><th>Model</th><th>Cena</th></tr></thead>
+<tbody><tr>
+<td>AD08</td>
+<td>
+195,-&euro;
+<table id="t-inner-nested">
+<thead><tr><th>Vn&uacute;torn&yacute; A</th><th>Vn&uacute;torn&yacute; B</th></tr></thead>
+<tbody><tr><td>x</td><td>y</td></tr></tbody>
+</table>
+</td>
+</tr></tbody>
+</table>
+
+<!-- 11. Author-supplied role="table" must still get its descendants processed: v1.9.0 fix -->
+<table class="responsiv" id="t-authored-role" role="table">
+<thead><tr><th>A</th><th>B</th></tr></thead>
+<tbody><tr><td>1</td><td>2</td></tr></tbody>
+</table>
+
+<!-- 12. role="presentation" must be fully respected (untouched): v1.9.0 fix -->
+<table class="responsiv" id="t-presentation" role="presentation">
+<thead><tr><th>A</th><th>B</th></tr></thead>
+<tbody><tr><td>1</td><td>2</td></tr></tbody>
+</table>
+
+<script src="../../media/js/fgresponsivetables.js"></script>
+</body>
+</html>

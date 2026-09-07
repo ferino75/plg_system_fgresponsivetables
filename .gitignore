@@ -10,3 +10,7 @@ Thumbs.db
 # Build artifacts
 *.zip
 /dist/
+
+# Playwright test dependencies/output (not part of the packaged extension)
+node_modules/
+test-results/

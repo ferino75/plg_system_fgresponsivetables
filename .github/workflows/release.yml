@@ -86,7 +86,12 @@ jobs:
             -x ".gitignore" \
             -x "assets/*" \
             -x "scripts/*" \
-            -x ".github/*"
+            -x ".github/*" \
+            -x "tests/*" \
+            -x "package.json" \
+            -x "package-lock.json" \
+            -x "playwright.config.js" \
+            -x "node_modules/*"
 
       - name: Commit the regenerated files back to master
         run: |
