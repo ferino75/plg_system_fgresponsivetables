@@ -71,6 +71,23 @@ See `README.txt` (Slovak) for the full list of helper classes, including the opt
 - **A brief flash of the unstacked table on mobile (FOUC).** The script has `defer` and runs as early as that allows (immediately once the document is parsed, not waiting for the `DOMContentLoaded` event if it hasn't already fired) — but a table can still render squeezed for a moment before JS stacks it into cards. Hiding the table until JS runs would remove this flash but break the safer no-JS fallback (a plain, fully-labeled table) this plugin deliberately keeps — not a trade worth making. The real fix is architectural: see [ROADMAP.md](ROADMAP.md) (container queries, 3.0), which would stack tables in pure CSS with no JS timing involved at all.
 - **Double announcement of the label on some screen readers.** The mobile card's label comes from `content: attr(data-label)` on a `::before` pseudo-element. Some screen readers (VoiceOver, NVDA in certain modes) read that generated content AND the `role="columnheader"`/`headers` association this plugin restores, so a user can hear the column name twice for one cell. This is a known trade-off of the "generated-content label" pattern used for the stacked-card layout, not a regression — `role="region"` + a name on the scrollable wrap (see Configuration) at least keeps the table clearly bounded even where this happens.
 
+## Development
+
+From the repository root:
+
+```
+composer install    # (n/a — plain PHP/JS/CSS, no build step)
+```
+
+### Cutting a release
+
+1. Add the new version's entry at the top of `CHANGELOG.md` and push that to `master`.
+2. Tag it and push the tag: `git tag v2.0.25 && git push origin v2.0.25`.
+
+`.github/workflows/release.yml` then does everything else: bumps the version in `fgresponsivetables.xml`, `media/joomla.asset.json`, and `updates.xml`, regenerates `changelog.xml` from `CHANGELOG.md`, verifies all four agree (`build-check.sh`) and that the XML/JSON/JS are syntactically valid, packages the install ZIP, commits the regenerated files back to `master`, and creates the GitHub Release with the ZIP attached. It fails on purpose if `CHANGELOG.md`'s newest entry doesn't match the tag — a forgotten changelog entry can't silently ship.
+
+`scripts/set_version.py` and `scripts/build_changelog_xml.py` are also runnable by hand for local testing; `build-check.sh` re-checks version consistency any time.
+
 ## License
 
 GPL-2.0-or-later — see [LICENSE.txt](LICENSE.txt).

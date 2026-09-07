@@ -10,6 +10,3 @@ Thumbs.db
 # Build artifacts
 *.zip
 /dist/
-
-# Local dev helper (not part of the packaged extension)
-build-check.sh

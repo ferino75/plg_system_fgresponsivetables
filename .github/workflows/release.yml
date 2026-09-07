@@ -1,0 +1,96 @@
+name: Release
+
+# Push a tag matching v*.*.* (e.g. v2.0.25) to trigger this. Before
+# tagging: add the new version's entry at the top of CHANGELOG.md and
+# push that to master first -- the workflow fails on purpose if the
+# tag's version doesn't match CHANGELOG.md's newest entry, so a
+# forgotten changelog entry can't silently ship. Everything else
+# (fgresponsivetables.xml, media/joomla.asset.json, updates.xml,
+# changelog.xml) is generated/bumped here, not by hand.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Derive version from the tag
+        id: version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Verify CHANGELOG.md's newest entry matches the tag
+        run: |
+          top="$(grep -m1 -oP '(?<=^## )\S+' CHANGELOG.md)"
+          if [ "$top" != "${{ steps.version.outputs.version }}" ]; then
+            echo "::error::CHANGELOG.md's newest entry is $top, but the tag says ${{ steps.version.outputs.version }}. Add a changelog entry for this version on master before tagging."
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Bump version in the manifest, asset.json, and updates.xml
+        run: python3 scripts/set_version.py "${{ steps.version.outputs.version }}"
+
+      - name: Regenerate changelog.xml from CHANGELOG.md
+        run: python3 scripts/build_changelog_xml.py
+
+      - name: Verify the four version sources agree
+        run: ./build-check.sh
+
+      - name: Validate XML/JSON syntax
+        run: |
+          python3 -c "import xml.dom.minidom as m; m.parse('fgresponsivetables.xml')"
+          python3 -c "import xml.dom.minidom as m; m.parse('updates.xml')"
+          python3 -c "import xml.dom.minidom as m; m.parse('changelog.xml')"
+          python3 -c "import json; json.load(open('media/joomla.asset.json'))"
+
+      - name: Check JS syntax
+        run: node --check media/js/fgresponsivetables.js
+
+      - name: Package the install ZIP
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          zip -r -X "plg_system_fgresponsivetables_v${version}.zip" . \
+            -x ".*" \
+            -x "build-check.sh" \
+            -x "updates.xml" \
+            -x "changelog.xml" \
+            -x "README.md" \
+            -x "ROADMAP.md" \
+            -x ".gitignore" \
+            -x "assets/*" \
+            -x "scripts/*" \
+            -x ".github/*"
+
+      - name: Commit the regenerated files back to master
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fgresponsivetables.xml media/joomla.asset.json updates.xml changelog.xml
+          if ! git diff --cached --quiet; then
+            git commit -m "Release v${{ steps.version.outputs.version }}: sync version + changelog.xml"
+            git push origin master
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "v${{ steps.version.outputs.version }}"
+          files: "plg_system_fgresponsivetables_v${{ steps.version.outputs.version }}.zip"
+          generate_release_notes: false

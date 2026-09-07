@@ -3,6 +3,18 @@
 	<changelog>
 		<element>fgresponsivetables</element>
 		<type>plugin</type>
+		<version>2.0.25</version>
+		<fix>
+			<item>Added a GitHub Actions release workflow (.github/workflows/release.yml), addressing a real recurring risk from a P3 finding in the same external analysis: version lives in three files (fgresponsivetables.xml, media/joomla.asset.json, updates.xml), and media/joomla.asset.json's version specifically drives cache-busting, so a forgotten bump there means visitors silently keep getting stale CSS/JS from cache even though the manifest says otherwise. From now on, cutting a release means: add the version's entry to the top of CHANGELOG.md, push to master, then tag and push vX.Y.Z. The workflow bumps all three version files, regenerates changelog.xml, verifies all four agree and that the XML/JSON/JS are syntactically valid, packages the ZIP, commits the regenerated files back, and creates the GitHub Release with the ZIP attached.</item>
+			<item>The workflow fails on purpose if CHANGELOG.md's newest entry doesn't match the tag being pushed, so the exact "forgot to update it somewhere" class of bug this feature targets can't ship silently.</item>
+			<item>Extracted the changelog.xml generation logic (used by hand for 2.0.18-2.0.24) into scripts/build_changelog_xml.py, and added scripts/set_version.py for the three-file version bump, both reusable manually and by the workflow.</item>
+			<item>Found and fixed an unrelated bug in the process: .gitignore had build-check.sh listed since the very first commit, meaning it was likely never actually pushed to the repository at all (git silently skips ignored files even under git add .), the ZIP-exclusion and the git-tracking concerns had been conflated; build-check.sh needs to be tracked in git for the new workflow to run it, only the release ZIP itself should exclude it (already handled separately by the packaging step's own exclude list).</item>
+			<item>Verified locally end to end (not on real GitHub Actions infrastructure, which isn't available in this environment): simulated every step of the workflow in sequence on a scratch copy of the repo, including the "forgot to update CHANGELOG.md" failure case (confirmed it correctly aborts with a clear error instead of shipping a mismatched version), and confirmed scripts/ and .github/ are excluded from the packaged ZIP. Not yet run on real GitHub Actions, please verify the first live tag push carefully.</item>
+		</fix>
+	</changelog>
+	<changelog>
+		<element>fgresponsivetables</element>
+		<type>plugin</type>
 		<version>2.0.24</version>
 		<fix>
 			<item>Fixed one more split point in the changelog display, found live: Joomla's changelog viewer breaks a single item into separate bullets at em/en dashes too, not just ampersands. changelog.xml's generator now replaces every em dash and en dash with a comma across all entries.</item>
