@@ -46,6 +46,11 @@ zalomiť ani vedľa dlhého popisku:
 (Predvolene sa hodnota v mobilnej karte smie zalomiť — to je
 bezpečnejšie pre dlhší text, napr. poznámku.)
 
+Tabuľku, ktorej stĺpce sa nemajú pri načítaní obsahu preskakovať
+(table-layout: fixed na desktope):
+
+  <table class="responsiv responsiv-fixed">...</table>
+
 Pomocné triedy (zachované z pôvodného CSS, len v legacy.css)
 --------------------------------------------------------------
   sirka-25, sirka-30

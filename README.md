@@ -47,6 +47,11 @@ The `responsiv` class is required unless "Enhance all article tables" is turned 
 
 To exclude a specific table: `<table class="no-responsiv">`.
 
+Two more helper classes on the table/cells themselves:
+
+- `<table class="responsiv responsiv-fixed">` — forces `table-layout: fixed` on the desktop table, useful when column widths jump around as content loads.
+- `<td class="rwd-nowrap" data-label="Price">€195</td>` — a value that's always short (a price, a code) and should never wrap onto a second line even next to a long label. The mobile card lets the value wrap by default, since that's safer for a longer piece of text (a note, a description).
+
 See `README.txt` (Slovak) for the full list of helper classes, including the opt-in `legacy.css` compatibility layer for sites migrating from the original tabulka.css.
 
 ## Configuration
@@ -55,6 +60,7 @@ See `README.txt` (Slovak) for the full list of helper classes, including the opt
 |---|---|---|
 | Table selector | `table.responsiv` | Which tables to enhance |
 | Enhance all article tables | Off | Also add `.responsiv` to tables inside `article`/`.com-content`/`.item-page`/`.blog`/`.category` |
+| Container selector | (the list above) | Only shown when "Enhance all article tables" is on. The CSS selector list itself — replace it for templates (Helix, JD, T4, ...) that wrap content differently than Joomla core does |
 | Fill data-label | On | Copy missing `data-label` from the matching header column |
 | Wrap table | On | Wrap in `.rwd-table-wrap` so stacking follows container width |
 | Accessibility (ARIA roles) | On | Add `role`/`scope` attributes compensating for mobile `display:block` |

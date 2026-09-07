@@ -3,6 +3,15 @@
 	<changelog>
 		<element>fgresponsivetables</element>
 		<type>plugin</type>
+		<version>2.0.28</version>
+		<fix>
+			<item>Fixed five smaller findings from a P3 review pass: a Czech-ism typo in the Slovak "Load legacy compatible styles" description (úplně → úplne); renamed the script Web Asset from plg_system_fgresponsivetables.tables to .tables-script (was legal since Joomla indexes by type+name, but matched core convention less than a distinct name); added declare(strict_types=1) to Fgresponsivetables.php (free, since every method already has a return type); documented .responsiv-fixed (table-layout: fixed) and .rwd-nowrap in README.md (README.txt already had the latter); made the autoClass container selector list configurable (auto_class_selector, shown only when "Enhance all article tables" is on) instead of hardcoded to Joomla core com_content markup, since templates like Helix, JD, or T4 wrap content differently.</item>
+			<item>All 31 functional regression assertions re-verified unaffected by these changes; the new auto_class_selector setting itself verified via headless render (a table inside a non-default container class gets .responsiv added when a matching custom selector is configured).</item>
+		</fix>
+	</changelog>
+	<changelog>
+		<element>fgresponsivetables</element>
+		<type>plugin</type>
 		<version>2.0.27</version>
 		<fix>
 			<item>Added a committed Playwright visual/functional regression suite (tests/), addressing a real gap from a P3 finding in the same external analysis: this project has already had one real visual regression ship (the float→flex mobile-card attempt in v1.3.4, reverted in v1.3.5) and multiple bugs an external review found by hand that this kind of suite would have caught automatically. tests/fixtures/*.html load the plugin's real CSS/JS directly (no Joomla involved) with 17 representative tables across 5 fixture pages, covering every P1 bug from the same analysis (colspan/rowspan header resolution, nested tables, rowspan-in-body label shift, th[scope=row] in stacked mode) plus the long-value-overflow fix, shared .table-wrapper handling, min-width scroll behavior, dark mode, and the "lines" card style.</item>

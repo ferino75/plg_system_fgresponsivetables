@@ -21,6 +21,7 @@
     minWidth: 0,
     scrollLabel: "Scrollable table",
     watchDom: false,
+    autoClassSelector: "article table, .com-content table, .item-page table, .blog table, .category table",
     exclude: "table.no-responsiv, .no-responsiv table",
   };
 
@@ -480,9 +481,14 @@
     }
 
     if (opts.autoClass) {
-      var extras = document.querySelectorAll(
-        "article table, .com-content table, .item-page table, .blog table, .category table"
-      );
+      var extras = [];
+      try {
+        extras = document.querySelectorAll(opts.autoClassSelector);
+      } catch (e) {
+        // An invalid custom selector shouldn't break the rest of the
+        // page's tables — just skip the autoClass pass this run.
+        extras = [];
+      }
       Array.prototype.forEach.call(extras, function (table) {
         if (matchesExclude(table, opts.exclude)) {
           return;

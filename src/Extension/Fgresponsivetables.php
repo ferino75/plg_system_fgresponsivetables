@@ -8,6 +8,8 @@
  * @license     GNU General Public License version 2 or later
  */
 
+declare(strict_types=1);
+
 namespace FG\Plugin\System\Fgresponsivetables\Extension;
 
 defined('_JEXEC') or die;
@@ -76,7 +78,7 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
         $wa = $document->getWebAssetManager();
         $wa->getRegistry()->addExtensionRegistryFile('plg_system_fgresponsivetables');
         $wa->useStyle('plg_system_fgresponsivetables.tables')
-            ->useScript('plg_system_fgresponsivetables.tables');
+            ->useScript('plg_system_fgresponsivetables.tables-script');
 
         if ((int) $this->params->get('load_legacy', 1) === 1) {
             $wa->useStyle('plg_system_fgresponsivetables.legacy');
@@ -96,6 +98,10 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             'selector'    => (string) $this->params->get('selector', 'table.responsiv'),
             'autoLabels'  => (int) $this->params->get('auto_labels', 1) === 1,
             'autoClass'   => (int) $this->params->get('auto_class', 0) === 1,
+            'autoClassSelector' => (string) $this->params->get(
+                'auto_class_selector',
+                'article table, .com-content table, .item-page table, .blog table, .category table'
+            ),
             'wrap'        => (int) $this->params->get('wrap', 1) === 1,
             'breakpoint'  => (int) $this->params->get('breakpoint', 600),
             'ariaRoles'   => (int) $this->params->get('aria_roles', 1) === 1,
