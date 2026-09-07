@@ -435,7 +435,22 @@
         return;
       }
       var width = target.getBoundingClientRect().width;
-      target.classList.toggle("is-stacked", width > 0 && width <= breakpoint);
+      var isStacked = width > 0 && width <= breakpoint;
+      if (isStacked) {
+        // Wrapping every td[data-label]'s content in span.rwd-value
+        // is a real DOM mutation — it can break a template's or a
+        // third-party script's own selectors (td > a, td > img:first
+        // -child, td:empty) and changes childNodes for anyone else
+        // reading the cell. Doing this unconditionally for every
+        // table, including ones that live at a width where they
+        // never actually stack into cards, mutates DOM that never
+        // needed to change. wrapCellValues() only wraps a given cell
+        // once (data-rwd-wrapped guard), so calling it here on every
+        // pass that's already stacked is a safe no-op after the
+        // first time.
+        wrapCellValues(table);
+      }
+      target.classList.toggle("is-stacked", isStacked);
       updateScrollShadow(target);
       updateFocusability(target, table, scrollLabel);
     };
@@ -503,8 +518,6 @@
       if (opts.autoLabels !== false) {
         applyLabels(table);
       }
-
-      wrapCellValues(table);
 
       if (opts.ariaRoles !== false) {
         applyAriaRoles(table);

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.12
+- Fixed a P2 finding from the same external analysis: `wrapCellValues()` ran unconditionally for every enhanced table, wrapping every `td[data-label]`'s content in `<span class="rwd-value">` regardless of whether that table would ever actually stack into cards, and regardless of the "Fill data-label" setting. Confirmed the risk was real, not theoretical: this mutation can break a template's or third-party script's own selectors (`td > a`, `td > img:first-child`, `td:empty`) and changes `childNodes` for anyone else reading the cell — including on tables that live comfortably at desktop width and never stack at all.
+- `wrapCellValues()` now only runs lazily, from inside `observeWidth()`'s `apply()`, on a pass where the table is actually about to be (or already is) `.is-stacked` — a table that never crosses the breakpoint never has its cells touched. `wrapCellValues()` was already idempotent per cell (`data-rwd-wrapped` guard), so calling it on every already-stacked pass afterwards remains a safe no-op.
+- Verified via headless render: a table in a 900px wrapper (never stacks) ends with zero `span.rwd-value` elements and its `<a>` cell content remains a direct child of `<td>` (`td > a` still matches); a table in a 300px wrapper (stacks) is wrapped as before; and a table that starts wide and is then resized narrow gets wrapped at exactly the point it crosses the breakpoint, not before. All prior fixes (2.0.2–2.0.11) re-verified unaffected by this change.
+
 ## 2.0.11
 - Fixed a P2 finding from the same external analysis: `ensureWrap()` assumed `table.parentElement` was never `null` and called `parent.insertBefore(...)` unconditionally — a detached table (built in memory by another script, or momentarily disconnected during a DOM move) would throw a `TypeError` there and abort the whole `forEach` in `enhance()`, leaving every table after it in that pass unprocessed.
 - `ensureWrap()` now returns the table itself when it has no parent, instead of throwing.
