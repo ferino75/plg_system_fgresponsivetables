@@ -277,6 +277,27 @@ table.responsiv.is-stacked td:last-child {
   border-bottom: 0;
 }
 
+/* The stacked layout above only ever switched tr/td (and tbody) to
+   block/grid — a <th scope="row"> as the first cell of a body row
+   (a common accessible pattern, row header instead of a plain <td>)
+   was never touched, so it stayed display:table-cell inside a now-
+   block tr: renders as a narrow strip taking only its own content
+   width, with empty space beside it, instead of spanning the card
+   like every other line. Give it the same full-width treatment,
+   styled as the card's header line (reusing --rwd-head, matching the
+   visually-hidden thead's own header color). */
+.rwd-table-wrap.is-stacked table.responsiv tbody th,
+.rwd-table-wrap.is-stacked table.responsiv tfoot th,
+table.responsiv.is-stacked tbody th,
+table.responsiv.is-stacked tfoot th {
+  display: block;
+  border: 0;
+  border-bottom: 1px solid var(--rwd-border);
+  background: var(--rwd-head);
+  padding: 0.625em 0.75em;
+  text-align: left;
+}
+
 /* Subtle zebra striping between the lines inside a card — a semi-
    transparent overlay so it darkens either card color slightly,
    instead of competing with the card-level alternation above */
