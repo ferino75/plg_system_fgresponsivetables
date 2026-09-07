@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.21
+- Re-added `<changelogurl>`/`changelog.xml` (removed in 2.0.20) with the actually-correct schema this time, verified against Joomla's own documentation (manual.joomla.org): each `<changelog>` entry needs `<element>`/`<type>`/`<version>`, then category tags in the SINGULAR — `<fix>`, `<addition>`, `<change>`, `<remove>`, `<security>`, `<language>`, `<note>` — each containing plain `<item>` children, no `title` attribute. What 2.0.18/2.0.19 actually shipped (`<fixes><fix title="...">`, `<name>`, `<description>`) doesn't match this schema at all, which is exactly why Joomla's `Changelog` class treated those as undeclared dynamic properties — not a Joomla core bug as 2.0.20 concluded, a wrong schema on our side. All bullets now map to `<fix><item>` entries.
+- **Not yet re-confirmed live** — the first two attempts both looked correct locally and both failed on the real site, so this needs an actual test on mechanizmysevcik.sk again before being trusted.
+
+## 2.0.20
+- Reverted `<changelogurl>` and `changelog.xml` (added in 2.0.18, trimmed further in 2.0.19) — confirmed live, on the real production site, that this is genuinely broken, not just noisy: Joomla's `Joomla\CMS\Changelog\Changelog` class sets every field it parses from the XML — even the most minimal set (`name`/`description`/`fixes`), already trimmed once in 2.0.19 to try to avoid this — as an undeclared dynamic property, which PHP 8.2 deprecates. On this site, no changelog rendered at all, only the PHP deprecation warnings; not a cosmetic log entry, an actually-broken feature.
+- This is a documented upstream Joomla bug (joomla/joomla-cms#41635), not something our XML content can work around — the same failure mode was already reported there for the most basic possible fields. Tracked as a blocked item in ROADMAP.md to revisit once it's fixed in Joomla core, rather than left half-working in the meantime.
+
 ## 2.0.19
 - Fixed PHP 8.2+ deprecation warnings reported live on the changelog display (Joomla's own `Changelog.php` class, tracked upstream as joomla-cms#41635): `<maintainer>`, `<maintainerurl>`, `<targetplatformversion>`, `<targetplatformname>`, and `<client>` inside a `<changelog>` entry aren't declared properties on that class, so Joomla was setting them as dynamic properties — deprecated since PHP 8.2. Those five elements weren't part of the actual `<changelog>` schema (I'd added them based on the `<update>` schema in `updates.xml`, which does support them, without verifying the `<changelog>` entry schema is different); removed them. `changelog.xml` entries now only use `<version>`, `<name>`, `<description>`, and `<fixes>`/`<fix>`, which don't trigger the warning.
 

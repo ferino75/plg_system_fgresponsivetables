@@ -1,5 +1,23 @@
 # Roadmap
 
+## Resolved: `<changelogurl>` — was our wrong schema, not a Joomla bug
+
+Tried in 2.0.18–2.0.20, reverted as apparently blocked by a Joomla
+core bug (dynamic properties on `Changelog.php`, PHP 8.2 deprecation).
+That diagnosis was wrong: the actual `<changelog>` entry schema
+(confirmed against Joomla's own documentation,
+manual.joomla.org/docs/building-extensions/install-update/installation/change-log)
+uses singular category tags — `<fix>`, `<addition>`, `<change>`,
+`<remove>`, `<security>`, `<language>`, `<note>` — each containing
+plain `<item>` children, plus `<element>`/`<type>`/`<version>`. What
+was actually shipped in 2.0.18/2.0.19 (`<fixes><fix title="...">`,
+`<name>`, `<description>`) doesn't match that schema at all — none of
+those are real properties on the `Changelog` class, which is exactly
+why they triggered the "dynamic property" deprecation. Re-added in
+2.0.21 with the corrected schema. **Needs a second live confirmation**
+on the real site before fully trusting it — the first two attempts
+both looked fine locally and both failed in production.
+
 ## 3.0 — Container queries instead of ResizeObserver
 
 `container-type: inline-size` + `@container` can do natively what
