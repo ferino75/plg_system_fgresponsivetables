@@ -68,6 +68,7 @@ See `README.txt` (Slovak) for the full list of helper classes, including the opt
 
 ## Known limitations
 
+- **A brief flash of the unstacked table on mobile (FOUC).** The script has `defer` and runs as early as that allows (immediately once the document is parsed, not waiting for the `DOMContentLoaded` event if it hasn't already fired) — but a table can still render squeezed for a moment before JS stacks it into cards. Hiding the table until JS runs would remove this flash but break the safer no-JS fallback (a plain, fully-labeled table) this plugin deliberately keeps — not a trade worth making. The real fix is architectural: see [ROADMAP.md](ROADMAP.md) (container queries, 3.0), which would stack tables in pure CSS with no JS timing involved at all.
 - **Double announcement of the label on some screen readers.** The mobile card's label comes from `content: attr(data-label)` on a `::before` pseudo-element. Some screen readers (VoiceOver, NVDA in certain modes) read that generated content AND the `role="columnheader"`/`headers` association this plugin restores, so a user can hear the column name twice for one cell. This is a known trade-off of the "generated-content label" pattern used for the stacked-card layout, not a regression — `role="region"` + a name on the scrollable wrap (see Configuration) at least keeps the table clearly bounded even where this happens.
 
 ## License
