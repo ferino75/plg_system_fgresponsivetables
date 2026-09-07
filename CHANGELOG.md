@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.14
+- Fixed a WCAG 1.4.4 accessibility issue from the same external analysis: `table.responsiv { font-size: 15px }` used an absolute pixel value, overriding the user's browser base font-size setting instead of scaling with it. Changed to `0.9375rem` (equal to 15px only at the default 16px root size, but now genuinely scales). `legacy.css`'s `1.15rem` was already rem-based and needed no change.
+- Fixed a manifest hygiene issue: none of the plugin's seven `radio` fields nor its one `list` field (`card_style`) had `validate="options"` — the core convention (e.g. `plg_system_httpheaders`) that stops an out-of-range value from ever being saved. `card_style` also had no `filter` at all; added `filter="cmd"`.
+- Verified via headless render: with the page's root font-size set to 20px, the table's computed font-size is 18.75px (0.9375 × 20), confirming it now scales; at the default 16px root it still renders as the original 15px, so no visible change for the common case.
+
 ## 2.0.13
 - Corrected a factual mistake from the original CSS comment, caught by the same external analysis and confirmed against the actual Joomla source: `data-color-scheme` is NOT something Cassiopeia (Joomla 5's default frontend template) sets — that attribute belongs to Atum, the ADMINISTRATOR template. Cassiopeia has no built-in dark-mode switch at all (a third-party plugin, "Dark Magic", exists specifically to add one, because Cassiopeia doesn't). Since this plugin only ever runs on the frontend (`isClient('site')`), the old `:root[data-color-scheme="dark"]` rule realistically matched almost nowhere in practice.
 - What real commercial/frontend templates commonly use instead is Bootstrap 5.3's own `data-bs-theme="dark"` — and typically not on `<html>` at all, but on `<body>` or some other wrapper. Rewrote the dark-mode trigger as a plain, unscoped `[data-color-scheme="dark"], [data-bs-theme="dark"]` attribute selector (matches on any ancestor, not just `:root` — the resulting custom-property values still inherit down correctly regardless of which ancestor carries the attribute) plus the same `prefers-color-scheme` OS-level fallback as before.

@@ -163,7 +163,7 @@ table.responsiv {
   border: 1px solid var(--rwd-border);
   border-collapse: collapse;
   color: var(--rwd-ink);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 
 table.responsiv.responsiv-fixed {
