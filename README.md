@@ -5,10 +5,11 @@
 <h1 align="center">FG Responsive Tables</h1>
 
 <p align="center">
-  <a href="https://github.com/ferino75/plg_system_fgresponsivetables/releases"><img src="https://img.shields.io/github/v/release/ferino75/plg_system_fgresponsivetables?label=release" alt="Latest release"></a>
+  <a href="https://github.com/ferino75/plg_system_fgresponsivetables/releases"><img src="https://img.shields.io/github/v/release/ferino75/plg_system_fgresponsivetables?color=FF6B4A&label=release" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/Joomla-4%20%7C%205%20%7C%206-1B7FBF" alt="Joomla 4 | 5 | 6">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777BB4" alt="PHP 7.4+">
-  <a href="LICENSE.txt"><img src="https://img.shields.io/badge/license-GPL--2.0--or--later-blue" alt="License: GPL-2.0-or-later"></a>
+  <a href="LICENSE.txt"><img src="https://img.shields.io/badge/license-GPL--2.0-green.svg" alt="License: GPL-2.0-or-later"></a>
+  <img src="https://img.shields.io/github/downloads/ferino75/plg_system_fgresponsivetables/total?cacheSeconds=3600" alt="Downloads">
 </p>
 
 A Joomla 4/5/6 system plugin that turns any `<table class="responsiv">` into a labelled, accessible card layout on narrow screens — without touching the desktop table.
