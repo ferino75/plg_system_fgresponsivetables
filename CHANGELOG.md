@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.18
+- Added `<changelogurl>` to the manifest and to `updates.xml`, pointing at a new `changelog.xml` (Joomla's own changelog XML format) hosted at the repo root — Joomla's Extensions Manager can now show the changelog directly in the update screen instead of sending someone to GitHub. `changelog.xml` is generated from `CHANGELOG.md` itself (one `<changelog>` entry per version, each bullet as a `<fix>`), so it stays in sync with the same source of truth rather than being maintained twice by hand.
+- `build-check.sh` now also checks `changelog.xml`'s newest entry against the other three version sources before allowing a package/tag.
+
 ## 2.0.17
 - Documented a known trade-off (bod 16 from the same external analysis): the mobile card's `content: attr(data-label)` generated-content label can be read twice by some screen readers (VoiceOver, NVDA in some modes) alongside the restored `role="columnheader"`/`headers` association — not a regression, a known limitation of this label pattern. Added to README.md under "Known limitations", noting `role="region"` (2.0.7) at least keeps the table clearly bounded even where this happens.
 - Added an opt-in "Load only on com_content pages" setting (default off, matching prior versions exactly): the plugin's ~10KB CSS/JS normally loads on every frontend page regardless of whether that page has a table at all, since `onBeforeCompileHead` fires before Joomla knows what's in `<body>`. When enabled, `onBeforeCompileHead()` checks `option=com_content` early and returns before touching the Web Asset Manager at all on any other page — a real, measurable saving on a content-heavy site. Off by default because a table this plugin should style can legitimately live outside `com_content` too (a module, another component's output), and the setting's description warns about that trade-off explicitly.
