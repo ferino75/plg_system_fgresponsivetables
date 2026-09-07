@@ -326,11 +326,18 @@
 
   function ensureWrap(table) {
     var parent = table.parentElement;
-    if (parent && parent.classList.contains("rwd-table-wrap")) {
+    if (!parent) {
+      // Detached from the document (e.g. built in memory by another
+      // script, or picked up mid-move by the opt-in MutationObserver)
+      // — nothing to wrap it into yet. Returning the table itself
+      // instead of throwing keeps this one bad table from breaking
+      // the forEach it's called from and every table after it.
+      return table;
+    }
+    if (parent.classList.contains("rwd-table-wrap")) {
       return parent;
     }
     if (
-      parent &&
       parent.classList.contains("table-wrapper") &&
       parent.getElementsByTagName("table").length === 1
     ) {
