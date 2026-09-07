@@ -25,6 +25,16 @@ jobs:
           ref: master
           fetch-depth: 0
 
+      - name: Normalize script permissions
+        # A repo committed from Windows often doesn't preserve the
+        # executable bit, which makes ./build-check.sh fail with
+        # "Permission denied" (exit 126) even though the file itself
+        # is fine. build-check.sh is also invoked via `bash
+        # build-check.sh` below so this isn't strictly required for
+        # that specific step, but it keeps direct ./ invocation
+        # working too (locally or in a future step).
+        run: chmod +x build-check.sh scripts/*.py
+
       - name: Derive version from the tag
         id: version
         run: |
@@ -51,7 +61,7 @@ jobs:
         run: python3 scripts/build_changelog_xml.py
 
       - name: Verify the four version sources agree
-        run: ./build-check.sh
+        run: bash build-check.sh
 
       - name: Validate XML/JSON syntax
         run: |

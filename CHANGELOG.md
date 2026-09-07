@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.26
+- Fixed the release workflow itself, found live on the first real tag push: `./build-check.sh` failed with "Permission denied" (exit code 126) because the executable bit wasn't preserved when the repository was committed from Windows. The v2.0.25 tag exists and its code is correct, but the workflow failed before reaching the "create GitHub Release" step, so that release still needs to be finished by hand once, the same way every prior release was.
+- `build-check.sh` is now invoked as `bash build-check.sh` in the workflow, which doesn't depend on the executable bit at all, plus an explicit `chmod +x` step right after checkout as a second layer of defense (also keeps direct `./build-check.sh` invocation working for anyone running it locally after a fresh checkout).
+- Not yet confirmed on real GitHub Actions infrastructure past this specific failure point — this tag push is the actual first end-to-end test.
+
 ## 2.0.25
 - Added a GitHub Actions release workflow (`.github/workflows/release.yml`), addressing a real recurring risk from a P3 finding in the same external analysis: version lives in three files (`fgresponsivetables.xml`, `media/joomla.asset.json`, `updates.xml`), and `media/joomla.asset.json`'s version specifically drives cache-busting, so a forgotten bump there means visitors silently keep getting stale CSS/JS from cache even though the manifest says otherwise. From now on, cutting a release means: add the version's entry to the top of CHANGELOG.md, push to master, then tag and push `vX.Y.Z`. The workflow bumps all three version files, regenerates changelog.xml, verifies all four agree and that the XML/JSON/JS are syntactically valid, packages the ZIP, commits the regenerated files back, and creates the GitHub Release with the ZIP attached.
 - The workflow fails on purpose if CHANGELOG.md's newest entry doesn't match the tag being pushed, so the exact "forgot to update it somewhere" class of bug this feature targets can't ship silently.
