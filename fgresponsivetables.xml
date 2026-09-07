@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="system" method="upgrade">
+	<name>PLG_SYSTEM_FGRESPONSIVETABLES</name>
+	<author>Fero</author>
+	<creationDate>2026-09</creationDate>
+	<copyright>(C) 2026 Fero</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail></authorEmail>
+	<authorUrl></authorUrl>
+	<version>2.0.0</version>
+	<description>PLG_SYSTEM_FGRESPONSIVETABLES_XML_DESCRIPTION</description>
+	<namespace path="src">FG\Plugin\System\Fgresponsivetables</namespace>
+	<updateservers>
+		<server type="extension" priority="1" name="FG Responsive Tables Update Site">https://raw.githubusercontent.com/ferino75/plg_system_fgresponsivetables/master/updates.xml</server>
+	</updateservers>
+	<files>
+		<folder plugin="fgresponsivetables">services</folder>
+		<folder>src</folder>
+		<filename>fgresponsivetables.xml</filename>
+		<filename>LICENSE.txt</filename>
+		<filename>README.txt</filename>
+		<filename>CHANGELOG.md</filename>
+	</files>
+	<media destination="plg_system_fgresponsivetables" folder="media">
+		<filename>joomla.asset.json</filename>
+		<folder>css</folder>
+		<folder>js</folder>
+	</media>
+	<languages>
+		<language tag="en-GB">language/en-GB/plg_system_fgresponsivetables.ini</language>
+		<language tag="en-GB">language/en-GB/plg_system_fgresponsivetables.sys.ini</language>
+		<language tag="sk-SK">language/sk-SK/plg_system_fgresponsivetables.ini</language>
+		<language tag="sk-SK">language/sk-SK/plg_system_fgresponsivetables.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="selector"
+					type="text"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_SELECTOR_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_SELECTOR_DESC"
+					default="table.responsiv"
+				/>
+				<field
+					name="exclude"
+					type="text"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_EXCLUDE_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_EXCLUDE_DESC"
+					default="table.no-responsiv, .no-responsiv table"
+				/>
+				<field
+					name="auto_labels"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_AUTO_LABELS_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_AUTO_LABELS_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="auto_class"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_AUTO_CLASS_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_AUTO_CLASS_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="wrap"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_WRAP_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_WRAP_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="aria_roles"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_ARIA_ROLES_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_ARIA_ROLES_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="card_style"
+					type="list"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_CARD_STYLE_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_CARD_STYLE_DESC"
+					default="card"
+					>
+					<option value="card">PLG_SYSTEM_FGRESPONSIVETABLES_CARD_STYLE_CARD</option>
+					<option value="lines">PLG_SYSTEM_FGRESPONSIVETABLES_CARD_STYLE_LINES</option>
+				</field>
+				<field
+					name="clear_floats"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_CLEAR_FLOATS_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_CLEAR_FLOATS_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="breakpoint"
+					type="number"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_BREAKPOINT_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_BREAKPOINT_DESC"
+					default="600"
+					min="320"
+					max="1200"
+					step="10"
+					filter="integer"
+				/>
+			</fieldset>
+			<fieldset name="compatibility" label="PLG_SYSTEM_FGRESPONSIVETABLES_FIELDSET_COMPATIBILITY">
+				<field
+					name="load_legacy"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_LOAD_LEGACY_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_LOAD_LEGACY_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="1"
+					filter="integer"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,331 @@
+/**
+ * Fero — unified responsive table styles
+ * Joomla 4 / 5 / 6 system plugin
+ *
+ * Stacks `table.responsiv` into a labeled, line-separated card layout
+ * when its wrapper is narrower than the configured breakpoint (class
+ * `.is-stacked`, toggled exclusively by the plugin script via
+ * ResizeObserver — no hardcoded viewport media query, see the note
+ * further down). Original class names from the source CSS are kept
+ * so existing articles keep working.
+ *
+ * Note: `.sirka-25` / `.sirka-30` use % instead of vw so opening an
+ * accordion (and the scrollbar appearing) no longer reflows column widths.
+ */
+
+:root {
+  --rwd-border: #dddddd;
+  --rwd-row: #f8f8f8;
+  --rwd-row-alt: #f9f9f9;
+  --rwd-row-hover: #f1f1f1;
+  --rwd-card-alt: #eef1f4;
+  --rwd-zebra: rgba(0, 0, 0, 0.035);
+  --rwd-head: #eaeaea;
+  --rwd-ink: #3e3e3e;
+  --rwd-label: #1c1c1c;
+  --rwd-accent-soft: #b2e9f0;
+  --rwd-card-radius: 8px;
+  --rwd-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --rwd-scroll-shadow: rgba(0, 0, 0, 0.18);
+}
+
+/* Dark mode — all table colors are variables, so overriding them here
+   is enough for both desktop and mobile cards. Two triggers:
+   1) Joomla 5's own color-scheme switcher (Cassiopeia and any other
+      template following the standard) sets data-color-scheme="dark"
+      on <html> — this wins outright, matching whatever the site's
+      switcher/user chose.
+   2) Plain OS/browser preference (prefers-color-scheme) as a fallback
+      for sites with no such switcher — skipped if the template has
+      explicitly forced light mode, so it never fights an explicit
+      choice on a Joomla 5 site sitting in "auto". */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-color-scheme="light"]) {
+    --rwd-border: #3a3f45;
+    --rwd-row: #1f2225;
+    --rwd-row-alt: #24282c;
+    --rwd-row-hover: #2b3035;
+    --rwd-card-alt: #262b30;
+    --rwd-zebra: rgba(255, 255, 255, 0.045);
+    --rwd-head: #2c3136;
+    --rwd-ink: #d5d8db;
+    --rwd-label: #f5f5f5;
+    --rwd-accent-soft: #1f4850;
+    --rwd-card-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+    --rwd-scroll-shadow: rgba(0, 0, 0, 0.55);
+  }
+}
+
+:root[data-color-scheme="dark"] {
+  --rwd-border: #3a3f45;
+  --rwd-row: #1f2225;
+  --rwd-row-alt: #24282c;
+  --rwd-row-hover: #2b3035;
+  --rwd-card-alt: #262b30;
+  --rwd-zebra: rgba(255, 255, 255, 0.045);
+  --rwd-head: #2c3136;
+  --rwd-ink: #d5d8db;
+  --rwd-label: #f5f5f5;
+  --rwd-accent-soft: #1f4850;
+  --rwd-card-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  --rwd-scroll-shadow: rgba(0, 0, 0, 0.55);
+}
+
+.rwd-table-wrap {
+  display: block;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rwd-table-wrap:focus-visible {
+  outline: 2px solid var(--rwd-border);
+  outline-offset: -2px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Horizontal-scroll hint: a thin inset shadow on whichever side still
+   has hidden columns. Toggled by JS (scroll position vs. scrollWidth),
+   so it only shows on tables that are actually wider than their wrap
+   and have not stacked into mobile cards. Works over any background
+   (light or dark) since it is painted on top, not blended into it. */
+.rwd-table-wrap.can-scroll-left:not(.is-stacked) {
+  box-shadow: inset 14px 0 10px -10px var(--rwd-scroll-shadow);
+}
+
+.rwd-table-wrap.can-scroll-right:not(.is-stacked) {
+  box-shadow: inset -14px 0 10px -10px var(--rwd-scroll-shadow);
+}
+
+.rwd-table-wrap.can-scroll-left.can-scroll-right:not(.is-stacked) {
+  box-shadow:
+    inset 14px 0 10px -10px var(--rwd-scroll-shadow),
+    inset -14px 0 10px -10px var(--rwd-scroll-shadow);
+}
+
+/* Site-specific workaround, opt-in only (plugin setting "Vyčistiť
+   plávajúce elementy pred tabuľkou", default off): some pages put a
+   float:right image right before the table and never clear it (a
+   template/content issue, not something every site has), which can
+   visually squeeze the table beside that float. Forcing clear:both
+   unconditionally for every install would be the wrong default — a
+   table legitimately placed next to a float elsewhere would always
+   be pushed below it. JS adds this class only when the setting is
+   on. */
+.rwd-clear-floats {
+  clear: both;
+}
+
+table.responsiv {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--rwd-border);
+  border-collapse: collapse;
+  color: var(--rwd-ink);
+  font-size: 15px;
+}
+
+table.responsiv.responsiv-fixed {
+  table-layout: fixed;
+}
+
+table.responsiv caption {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin: 0.5em 0 0.75em;
+  text-align: left;
+  color: var(--rwd-label);
+}
+
+table.responsiv tr {
+  background-color: var(--rwd-row);
+  border: 1px solid var(--rwd-border);
+}
+
+table.responsiv tbody tr:nth-child(even) {
+  background-color: var(--rwd-row-alt);
+}
+
+table.responsiv tbody tr:hover {
+  background-color: var(--rwd-row-hover);
+}
+
+table.responsiv th,
+table.responsiv td {
+  padding: 0.625em 0.75em;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--rwd-border);
+}
+
+table.responsiv th {
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--rwd-head);
+}
+
+/* Width helper classes (.sirka-25/.sirka-30, .col-w-md-*) moved to
+   legacy.css — see the "Compatibility" plugin setting. The reset
+   below (clearing them back to auto when stacked) stays here: it's a
+   harmless no-op if those classes are never defined (legacy.css off
+   or simply absent from the page), and this file must not assume
+   legacy.css is loaded. */
+
+/* ===== Stacked card layout (narrow column or phone) =====
+   On mechanizmysevcik.sk (and similarly built pages) one "Automobilové
+   žeriavy" price table has ONE <thead> + several <tr> data rows (AD08,
+   AD20, AD28...), each with several <td> columns. In stacked mode each
+   original row becomes one "card": the outer table itself stays
+   borderless (it just holds several cards), and the border + spacing
+   that make each row read as its own card live on `tr`, not on the
+   table. Label floated left, value right-aligned (line format from
+   tabulka (2).css). Desktop rules above are untouched. */
+.rwd-table-wrap.is-stacked table.responsiv,
+table.responsiv.is-stacked {
+  border: 0;
+  table-layout: auto;
+}
+
+.rwd-table-wrap.is-stacked table.responsiv caption,
+table.responsiv.is-stacked caption {
+  font-size: 1.15em;
+}
+
+.rwd-table-wrap.is-stacked table.responsiv thead,
+table.responsiv.is-stacked thead {
+  border: none;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* tr/td below are switched to display:block, but tbody itself was
+   left as native table-row-group — that mismatch confuses the
+   table's auto layout algorithm and can make tbody (and so every
+   visible card inside it) compute a narrower width than the table
+   actually has available. Force it to block too, full width. */
+.rwd-table-wrap.is-stacked table.responsiv tbody,
+table.responsiv.is-stacked tbody {
+  display: block;
+  width: 100%;
+}
+
+.rwd-table-wrap.is-stacked table.responsiv tr,
+table.responsiv.is-stacked tr {
+  display: block;
+  border: 1px solid var(--rwd-border);
+  border-bottom: 3px solid var(--rwd-border);
+  border-radius: var(--rwd-card-radius);
+  box-shadow: var(--rwd-card-shadow);
+  overflow: hidden;
+  margin-bottom: 0.75em;
+}
+
+/* Alternate "lines only" style (plugin setting "Mobile card style" set
+   to Plain dividing lines) — the JS adds .rwd-style-lines to the table
+   when chosen. Removes the border/shadow/radius so a stacked row is
+   just its content with a divider under it, closer to the original
+   tabulka.css look. Card-level alternation and internal zebra still
+   apply — they are independent of the border choice. */
+.rwd-table-wrap.is-stacked table.responsiv.rwd-style-lines tr,
+table.responsiv.is-stacked.rwd-style-lines tr {
+  border: none;
+  border-bottom: 3px solid var(--rwd-border);
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  margin-bottom: 0.625em;
+}
+
+/* Mobile-only: every other card gets a clearer background than the
+   shared desktop --rwd-row-alt (which is barely different from
+   --rwd-row and only reads once :hover kicks in). Desktop rows are
+   untouched. */
+.rwd-table-wrap.is-stacked table.responsiv tbody tr:nth-child(even),
+table.responsiv.is-stacked tbody tr:nth-child(even) {
+  background-color: var(--rwd-card-alt);
+}
+
+.rwd-table-wrap.is-stacked table.responsiv td,
+table.responsiv.is-stacked td {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: 0.75em;
+  font-size: 0.95em;
+  border: none;
+  border-bottom: 1px solid var(--rwd-border);
+  padding: 0.625em 0.75em;
+}
+
+.rwd-table-wrap.is-stacked table.responsiv td:last-child,
+table.responsiv.is-stacked td:last-child {
+  border-bottom: 0;
+}
+
+/* Subtle zebra striping between the lines inside a card — a semi-
+   transparent overlay so it darkens either card color slightly,
+   instead of competing with the card-level alternation above */
+.rwd-table-wrap.is-stacked table.responsiv td:nth-child(even),
+table.responsiv.is-stacked td:nth-child(even) {
+  background-color: var(--rwd-zebra);
+}
+
+/* Label + value as two real grid items (JS wraps the value in
+   span.rwd-value). The label sits in the flexible 1fr column and can
+   wrap onto a second line if it's long; the value sits in its own
+   auto-sized column and never wraps or moves — this is what actually
+   fixes the old float's long-label collision (e.g. "Cena za 1 hod.
+   nad paušál (min. 3 hod.)"), not just a visual tweak. Grid gives
+   each piece its own track, so — unlike float or flex-basis tricks —
+   there's no code path where they can end up sharing a line. */
+.rwd-table-wrap.is-stacked table.responsiv td[data-label]::before,
+table.responsiv.is-stacked td[data-label]::before {
+  content: attr(data-label);
+  font-weight: 700;
+  color: var(--rwd-label);
+}
+
+.rwd-table-wrap.is-stacked table.responsiv td .rwd-value,
+table.responsiv.is-stacked td .rwd-value {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rwd-table-wrap.is-stacked .sirka-25,
+.rwd-table-wrap.is-stacked .sirka-30,
+.rwd-table-wrap.is-stacked .col-w-md-25,
+.rwd-table-wrap.is-stacked .col-w-md-33,
+.rwd-table-wrap.is-stacked .col-w-md-50,
+.rwd-table-wrap.is-stacked .col-w-md-60,
+.rwd-table-wrap.is-stacked .col-w-md-66,
+.rwd-table-wrap.is-stacked .col-w-md-75,
+.rwd-table-wrap.is-stacked .col-w-md-100,
+table.responsiv.is-stacked .sirka-25,
+table.responsiv.is-stacked .sirka-30 {
+  width: auto;
+  white-space: normal;
+}
+
+/* No hardcoded @media fallback: stacking is driven exclusively by JS
+   (ResizeObserver toggling .is-stacked, respecting the configured
+   breakpoint). A fixed 600px media query here would silently ignore
+   any other breakpoint set in the plugin's options, and — worse — it
+   would try to stack the table using data-label attributes that only
+   JS provides; without JS those wouldn't exist, so cells would show
+   values with no labels. Without JS, the safer fallback is simply a
+   normal, fully labeled HTML table. */

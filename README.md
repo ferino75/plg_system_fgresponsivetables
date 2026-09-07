@@ -1,0 +1,67 @@
+<p align="center">
+  <img src="assets/logo.png" alt="FG Responsive Tables logo" width="128" height="128">
+</p>
+
+<h1 align="center">FG Responsive Tables</h1>
+
+<p align="center">
+  <a href="https://github.com/ferino75/plg_system_fgresponsivetables/releases"><img src="https://img.shields.io/github/v/release/ferino75/plg_system_fgresponsivetables?label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/Joomla-4%20%7C%205%20%7C%206-1B7FBF" alt="Joomla 4 | 5 | 6">
+  <img src="https://img.shields.io/badge/PHP-7.4%2B-777BB4" alt="PHP 7.4+">
+  <a href="LICENSE.txt"><img src="https://img.shields.io/badge/license-GPL--2.0--or--later-blue" alt="License: GPL-2.0-or-later"></a>
+</p>
+
+A Joomla 4/5/6 system plugin that turns any `<table class="responsiv">` into a labelled, accessible card layout on narrow screens — without touching the desktop table.
+
+## Features
+
+- **CSS Grid card layout** — label and value each get their own column, so a long header (e.g. "Cena za 1 hod. nad paušál (min. 3 hod.)") can wrap without ever colliding with the value.
+- **Accessible by default** — explicit `role`/`scope` attributes compensate for the `display:block` stacking, so screen readers still navigate the table normally on mobile. Respects an author-supplied `role="presentation"`.
+- **Colspan/rowspan-aware header resolution** — a grouped header (`<th colspan="2">Cena</th>` over `<th>hodina</th><th>km</th>`) resolves to the correct per-column label, not a naive cell-index guess.
+- **Nested-table safe** — uses native `table.rows` / `row.cells` throughout, so a `<table>` nested inside a cell is never touched by the outer table's processing.
+- **Reacts to container width, not just viewport** — `ResizeObserver` on the table's own wrapper, so it stacks correctly inside a narrow module, sidebar, or accordion panel even on a wide screen.
+- **Configurable**: table selector, exclude selector, breakpoint, card style (bordered card vs. plain dividing lines), optional float-clearing, optional legacy-class compatibility layer.
+- **Zero dependencies**, plain JS + CSS, ships as a single system plugin.
+
+## Installation
+
+1. Download the latest release ZIP from the [Releases](https://github.com/ferino75/plg_system_fgresponsivetables/releases) page.
+2. Joomla admin → System → Install → Extensions → upload the ZIP.
+3. System → Plugins → search "FG Responsive Tables" → enable.
+
+## Usage
+
+```html
+<table class="responsiv">
+  <thead>
+    <tr><th>Service</th><th>Price</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Consultation</td><td>€45</td></tr>
+  </tbody>
+</table>
+```
+
+The `responsiv` class is required unless "Enhance all article tables" is turned on in the plugin settings. `data-label` is filled in automatically from the table header; add it manually only if you want a different label than the header text.
+
+To exclude a specific table: `<table class="no-responsiv">`.
+
+See `README.txt` (Slovak) for the full list of helper classes, including the opt-in `legacy.css` compatibility layer for sites migrating from the original tabulka.css.
+
+## Configuration
+
+| Setting | Default | What it does |
+|---|---|---|
+| Table selector | `table.responsiv` | Which tables to enhance |
+| Enhance all article tables | Off | Also add `.responsiv` to tables inside `article`/`.com-content`/`.item-page`/`.blog`/`.category` |
+| Fill data-label | On | Copy missing `data-label` from the matching header column |
+| Wrap table | On | Wrap in `.rwd-table-wrap` so stacking follows container width |
+| Accessibility (ARIA roles) | On | Add `role`/`scope` attributes compensating for mobile `display:block` |
+| Mobile card style | Bordered card | Bordered card (rounded, shadow) vs. plain dividing lines |
+| Clear floats before the table | Off | Add `clear:both` — for pages with an uncleared `float:right` image before the table |
+| Breakpoint (px) | 600 | Below this wrapper width, the table stacks into cards |
+| Load legacy compatible styles | On | Load `legacy.css` (`.day-content`, `.sirka-*`, `.col-w-md-*`, ...) — turn off on a new/unrelated site, these class names are generic |
+
+## License
+
+GPL-2.0-or-later — see [LICENSE.txt](LICENSE.txt).

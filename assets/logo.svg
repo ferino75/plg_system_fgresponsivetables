@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#081D32"/>
+      <stop offset="100%" stop-color="#113758"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
+
+  <!-- Left half: a small 2x3 desktop table, white grid lines -->
+  <g transform="translate(96,146)">
+    <rect x="0" y="0" width="150" height="220" rx="10" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+    <line x1="0" y1="55" x2="150" y2="55" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="0" y1="130" x2="150" y2="130" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="75" y1="0" x2="75" y2="220" stroke="#FFFFFF" stroke-width="8"/>
+    <rect x="0" y="0" width="150" height="55" fill="#FFFFFF" opacity="0.18"/>
+  </g>
+
+  <!-- Arrow motif -->
+  <g transform="translate(266,246)">
+    <line x1="0" y1="10" x2="46" y2="10" stroke="#FF6B4A" stroke-width="12" stroke-linecap="round"/>
+    <polyline points="30,-8 52,10 30,28" fill="none" stroke="#FF6B4A" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Right half: three stacked cards (mobile) -->
+  <g transform="translate(340,120)">
+    <rect x="0" y="0" width="90" height="52" rx="10" fill="#FFFFFF"/>
+    <rect x="10" y="12" width="45" height="8" rx="4" fill="#113758"/>
+    <rect x="10" y="30" width="65" height="8" rx="4" fill="#c9d3dc"/>
+
+    <rect x="0" y="66" width="90" height="52" rx="10" fill="#FFFFFF"/>
+    <rect x="10" y="78" width="45" height="8" rx="4" fill="#113758"/>
+    <rect x="10" y="96" width="65" height="8" rx="4" fill="#c9d3dc"/>
+
+    <rect x="0" y="132" width="90" height="52" rx="10" fill="#FF6B4A"/>
+    <rect x="10" y="144" width="45" height="8" rx="4" fill="#FFFFFF"/>
+    <rect x="10" y="162" width="65" height="8" rx="4" fill="#ffe0d6"/>
+
+    <rect x="0" y="198" width="90" height="52" rx="10" fill="#FFFFFF"/>
+    <rect x="10" y="210" width="45" height="8" rx="4" fill="#113758"/>
+    <rect x="10" y="228" width="65" height="8" rx="4" fill="#c9d3dc"/>
+  </g>
+</svg>

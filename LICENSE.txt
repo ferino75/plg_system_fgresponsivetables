@@ -1,0 +1,11 @@
+GNU GENERAL PUBLIC LICENSE
+Version 2, June 1991
+
+This Joomla plugin is licensed under the GNU General Public License
+version 2 or later, as required by Joomla! CMS.
+
+You may copy, distribute and modify the software as long as you track
+changes/dates in source files. Any modifications or derived works must
+also be distributed under GPL-2.0-or-later.
+
+Full license text: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html

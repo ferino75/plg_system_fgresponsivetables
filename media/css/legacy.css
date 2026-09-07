@@ -1,0 +1,77 @@
+/**
+ * Fero — legacy compatibility styles
+ *
+ * These classes were ported from the original tabulka.css used on the
+ * sites this plugin was first built for (mechanizmysevcik.sk and
+ * others). Their names — .responsive-table, .day-content, .sirka-25,
+ * .col-w-md-* — are generic enough that an unrelated site could
+ * plausibly already use them for something else entirely; loading
+ * this file there would silently restyle content this plugin was
+ * never meant to touch.
+ *
+ * Loaded only when the plugin's "Compatibility → Load legacy
+ * compatible styles" setting is on. Turn it ON for the original
+ * sites this was built for (they rely on these classes); leave it
+ * OFF on any other/new install.
+ *
+ * Requires fgresponsivetables.css to also be loaded (uses its
+ * --rwd-head / --rwd-accent-soft custom properties).
+ */
+
+/* Width helpers — % not vw, so scrollbar appearance does not reflow columns */
+.sirka-25 {
+  width: 25%;
+}
+
+.sirka-30 {
+  width: 30%;
+}
+
+@media (min-width: 768px) {
+  .col-w-md-25 { width: 25%; white-space: nowrap; }
+  .col-w-md-33 { width: 33.33%; white-space: nowrap; }
+  .col-w-md-50 { width: 50%; white-space: nowrap; }
+  .col-w-md-60 { width: 60%; white-space: nowrap; }
+  .col-w-md-66 { width: 66.66%; white-space: nowrap; }
+  .col-w-md-75 { width: 75%; white-space: nowrap; }
+  .col-w-md-100 { width: 100%; white-space: nowrap; }
+}
+
+/* ===== Day / schedule blocks (from tabulka.css) ===== */
+.responsive-table,
+.rwd-schedule {
+  display: block;
+}
+
+[class^="day-section"] {
+  margin-bottom: 1rem;
+}
+
+.day-content {
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  margin: -1px 0 0 -1px;
+  box-sizing: border-box;
+}
+
+p.day-content:hover {
+  background: var(--rwd-accent-soft);
+}
+
+.responsive-table .head,
+.rwd-schedule .head,
+.day-content.head {
+  background: var(--rwd-head);
+  font-size: 1.15rem;
+}
+
+@media (min-width: 800px) {
+  .responsive-table,
+  .rwd-schedule {
+    display: flex;
+  }
+
+  [class^="day-section"] {
+    flex-grow: 1;
+  }
+}

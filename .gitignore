@@ -1,0 +1,15 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts
+*.zip
+/dist/
+
+# Local dev helper (not part of the packaged extension)
+build-check.sh

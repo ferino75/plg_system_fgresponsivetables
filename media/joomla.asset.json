@@ -1,0 +1,33 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_system_fgresponsivetables",
+  "version": "2.0.0",
+  "description": "FG Responsive Tables for Joomla",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "plg_system_fgresponsivetables.tables",
+      "type": "style",
+      "uri": "plg_system_fgresponsivetables/fgresponsivetables.css"
+    },
+    {
+      "name": "plg_system_fgresponsivetables.legacy",
+      "type": "style",
+      "uri": "plg_system_fgresponsivetables/legacy.css",
+      "dependencies": [
+        "plg_system_fgresponsivetables.tables"
+      ]
+    },
+    {
+      "name": "plg_system_fgresponsivetables.tables",
+      "type": "script",
+      "uri": "plg_system_fgresponsivetables/fgresponsivetables.js",
+      "dependencies": [
+        "core"
+      ],
+      "attributes": {
+        "defer": true
+      }
+    }
+  ]
+}
