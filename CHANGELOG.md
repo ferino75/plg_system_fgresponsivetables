@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.22
+- Fixed the changelog display itself, confirmed broken live (no PHP errors this time — the modal opened, but content was shredded into meaningless one-word bullets). Cause: several `CHANGELOG.md` bullets reference literal HTML/XML tag names in backticks (`` `<changelogurl>` ``, `` `<fix>` ``, etc.); these were correctly XML-escaped as `&lt;...&gt;` for `changelog.xml`, but Joomla's changelog viewer decodes them back to real `<`/`>` before displaying, and the browser then parses `<changelogurl>` etc. as actual (unknown) HTML tags — splitting the bullet into fragments around them instead of showing it as one line.
+- `changelog.xml`'s generator now strips any `<...>` span down to its bare inner text before escaping (`` `<changelogurl>` `` → `changelogurl`), so no tag-like angle-bracket pairs remain in the output at all. A few standalone `&gt;` characters remain (CSS `td > a`, PHP `$this->method()`) — those are safe on their own, since a lone `>` with no matching `<` doesn't start a tag.
+- Not yet re-confirmed live for actual readability (only the "no more shredded bullets" fix is new here) — please check once more.
+
 ## 2.0.21
 - Re-added `<changelogurl>`/`changelog.xml` (removed in 2.0.20) with the actually-correct schema this time, verified against Joomla's own documentation (manual.joomla.org): each `<changelog>` entry needs `<element>`/`<type>`/`<version>`, then category tags in the SINGULAR — `<fix>`, `<addition>`, `<change>`, `<remove>`, `<security>`, `<language>`, `<note>` — each containing plain `<item>` children, no `title` attribute. What 2.0.18/2.0.19 actually shipped (`<fixes><fix title="...">`, `<name>`, `<description>`) doesn't match this schema at all, which is exactly why Joomla's `Changelog` class treated those as undeclared dynamic properties — not a Joomla core bug as 2.0.20 concluded, a wrong schema on our side. All bullets now map to `<fix><item>` entries.
 - **Not yet re-confirmed live** — the first two attempts both looked correct locally and both failed on the real site, so this needs an actual test on mechanizmysevcik.sk again before being trusted.
