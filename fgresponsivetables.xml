@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
-	<version>2.0.16</version>
+	<version>2.0.17</version>
 	<description>PLG_SYSTEM_FGRESPONSIVETABLES_XML_DESCRIPTION</description>
 	<namespace path="src">FG\Plugin\System\Fgresponsivetables</namespace>
 	<updateservers>
@@ -153,6 +153,19 @@
 					type="radio"
 					label="PLG_SYSTEM_FGRESPONSIVETABLES_WATCH_DOM_LABEL"
 					description="PLG_SYSTEM_FGRESPONSIVETABLES_WATCH_DOM_DESC"
+					layout="joomla.form.field.radio.switcher"
+					default="0"
+					filter="integer"
+					validate="options"
+					>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field
+					name="load_only_com_content"
+					type="radio"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_LOAD_ONLY_COM_CONTENT_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_LOAD_ONLY_COM_CONTENT_DESC"
 					layout="joomla.form.field.radio.switcher"
 					default="0"
 					filter="integer"

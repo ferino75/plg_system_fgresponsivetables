@@ -53,6 +53,20 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             return;
         }
 
+        // Off by default (loads everywhere, matching prior versions) since a
+        // table this plugin should style can live outside com_content too —
+        // a module, another component's output, a custom layout. Turning
+        // this on is a real, measurable win on a content-heavy site (skips
+        // ~10KB of CSS/JS in <head> on every page that has no table at
+        // all), at the cost of the plugin doing nothing anywhere else.
+        if ((int) $this->params->get('load_only_com_content', 0) === 1) {
+            $option = $app->input->getCmd('option', '');
+
+            if ($option !== 'com_content') {
+                return;
+            }
+        }
+
         $document = $app->getDocument();
 
         if (!$document instanceof HtmlDocument) {
