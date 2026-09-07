@@ -13,6 +13,7 @@ namespace FG\Plugin\System\Fgresponsivetables\Extension;
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Document\HtmlDocument;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Event\SubscriberInterface;
 
@@ -67,6 +68,16 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             $wa->useStyle('plg_system_fgresponsivetables.legacy');
         }
 
+        // Plugin language files are installed under administrator/language
+        // regardless of client (Installer::parseLanguages() is called with
+        // client id 1 for plugins), and $autoloadLanguage was removed in
+        // 2.0.0 as unused — so on the frontend nothing loads this plugin's
+        // strings automatically. Any text the JS needs to show the user has
+        // to be resolved here, with an explicit loadLanguage() call, and
+        // handed over via addScriptOptions; Text::_() alone would silently
+        // return the raw language key on the frontend without this.
+        $this->loadLanguage();
+
         $document->addScriptOptions('plg_system_fgresponsivetables', [
             'selector'    => (string) $this->params->get('selector', 'table.responsiv'),
             'autoLabels'  => (int) $this->params->get('auto_labels', 1) === 1,
@@ -77,6 +88,7 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             'cardStyle'   => (string) $this->params->get('card_style', 'card'),
             'clearFloats' => (int) $this->params->get('clear_floats', 0) === 1,
             'minWidth'    => (int) $this->params->get('min_width', 0),
+            'scrollLabel' => Text::_('PLG_SYSTEM_FGRESPONSIVETABLES_SCROLL_REGION'),
             'exclude'     => (string) $this->params->get('exclude', 'table.no-responsiv, .no-responsiv table'),
         ]);
     }

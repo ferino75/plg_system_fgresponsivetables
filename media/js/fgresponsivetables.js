@@ -19,6 +19,7 @@
     cardStyle: "card",
     clearFloats: false,
     minWidth: 0,
+    scrollLabel: "Scrollable table",
     exclude: "table.no-responsiv, .no-responsiv table",
   };
 
@@ -359,26 +360,41 @@
    * keyboard users on most tables. Only ever add/remove the tabindex
    * WE set (tracked via data-rwd-tabindex) — an author-supplied one
    * is left alone either way.
+   *
+   * A focusable scroll region with no accessible name is its own
+   * problem: a screen reader announces the Tab stop with nothing to
+   * identify it by. The recommended pattern for a scrollable table is
+   * role="region" plus a name — from the table's own <caption> when
+   * there is one, otherwise a translated fallback string passed in
+   * from PHP (frontend has no language file of its own to pull from;
+   * see the PHP-side loadLanguage()/Text::_() call that produces it).
    */
-  function updateFocusability(target) {
+  function updateFocusability(target, table, scrollLabel) {
     var scrollable = target.scrollWidth > target.clientWidth + 1 && !target.classList.contains("is-stacked");
     if (scrollable) {
       if (!target.hasAttribute("tabindex")) {
         target.setAttribute("tabindex", "0");
         target.setAttribute("data-rwd-tabindex", "1");
       }
+      if (target.getAttribute("data-rwd-tabindex") === "1") {
+        var label = (table.caption && cleanText(table.caption.textContent)) || scrollLabel || "Scrollable table";
+        target.setAttribute("role", "region");
+        target.setAttribute("aria-label", label);
+      }
     } else if (target.getAttribute("data-rwd-tabindex") === "1") {
       target.removeAttribute("tabindex");
       target.removeAttribute("data-rwd-tabindex");
+      target.removeAttribute("role");
+      target.removeAttribute("aria-label");
     }
   }
 
-  function observeWidth(target, breakpoint) {
+  function observeWidth(target, table, breakpoint, scrollLabel) {
     var apply = function () {
       var width = target.getBoundingClientRect().width;
       target.classList.toggle("is-stacked", width > 0 && width <= breakpoint);
       updateScrollShadow(target);
-      updateFocusability(target);
+      updateFocusability(target, table, scrollLabel);
     };
     apply();
     if (typeof ResizeObserver !== "undefined") {
@@ -463,7 +479,7 @@
       if (minWidth > 0) {
         target.style.setProperty("--rwd-min-width", minWidth + "px");
       }
-      observeWidth(target, breakpoint);
+      observeWidth(target, table, breakpoint, opts.scrollLabel);
     });
   }
 
