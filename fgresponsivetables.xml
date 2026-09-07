@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
-	<version>2.0.5</version>
+	<version>2.0.6</version>
 	<description>PLG_SYSTEM_FGRESPONSIVETABLES_XML_DESCRIPTION</description>
 	<namespace path="src">FG\Plugin\System\Fgresponsivetables</namespace>
 	<updateservers>
@@ -127,6 +127,17 @@
 					default="600"
 					min="320"
 					max="1200"
+					step="10"
+					filter="integer"
+				/>
+				<field
+					name="min_width"
+					type="number"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_MIN_WIDTH_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_MIN_WIDTH_DESC"
+					default="0"
+					min="0"
+					max="2000"
 					step="10"
 					filter="integer"
 				/>

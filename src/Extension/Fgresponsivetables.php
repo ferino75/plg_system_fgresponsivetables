@@ -76,6 +76,7 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             'ariaRoles'   => (int) $this->params->get('aria_roles', 1) === 1,
             'cardStyle'   => (string) $this->params->get('card_style', 'card'),
             'clearFloats' => (int) $this->params->get('clear_floats', 0) === 1,
+            'minWidth'    => (int) $this->params->get('min_width', 0),
             'exclude'     => (string) $this->params->get('exclude', 'table.no-responsiv, .no-responsiv table'),
         ]);
     }

@@ -122,6 +122,25 @@
   clear: both;
 }
 
+/* Opt-in, plugin setting "Minimálna šírka tabuľky (px)" (default 0 =
+   off): with plain `width: 100%` and table-layout:auto, a browser
+   will happily SHRINK columns to fit rather than let the table
+   overflow — so in the width band between the stacking breakpoint
+   and "plenty of room" (a tablet, a narrow module, an open
+   accordion), a wide table neither stacks into cards NOR scrolls; it
+   just squeezes into unreadable multi-line column headers. The
+   scroll-shadow and keyboard-focus logic above only ever activates
+   when scrollWidth genuinely exceeds clientWidth — this min-width is
+   what makes that condition possible to reach at all for an
+   auto-layout table; without it that logic has nothing to react to
+   in this width band. JS sets --rwd-min-width (via inline style) on
+   the wrap only when the setting is above 0, so the fallback below
+   is a genuine no-op (min-width: 0) everywhere else. */
+.rwd-table-wrap:not(.is-stacked) table.responsiv,
+table.responsiv:not(.is-stacked) {
+  min-width: var(--rwd-min-width, 0);
+}
+
 table.responsiv {
   width: 100%;
   margin: 0;

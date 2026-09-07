@@ -18,6 +18,7 @@
     ariaRoles: true,
     cardStyle: "card",
     clearFloats: false,
+    minWidth: 0,
     exclude: "table.no-responsiv, .no-responsiv table",
   };
 
@@ -457,6 +458,10 @@
       }
       if (opts.clearFloats) {
         target.classList.add("rwd-clear-floats");
+      }
+      var minWidth = parseInt(opts.minWidth, 10) || 0;
+      if (minWidth > 0) {
+        target.style.setProperty("--rwd-min-width", minWidth + "px");
       }
       observeWidth(target, breakpoint);
     });
