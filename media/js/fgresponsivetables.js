@@ -163,20 +163,24 @@
 
 
   /**
-   * Known limitation: this advances the column pointer by a body
-   * cell's own colspan (so a <td colspan="2"> correctly pushes later
-   * cells in the SAME row to the right column), but does not track
-   * rowspan on body cells — a <td rowspan="2"> in one row shifting
-   * column numbering for the NEXT row isn't accounted for. Rowspan
-   * in the body is rare for this kind of price/schedule table and a
-   * full fix means carrying state across rows; out of scope for now.
+   * Tracks an "occupied" grid across rows — same idea headerLabels()
+   * already uses for the header — instead of a fresh colIndex per
+   * row. Without this, a <td rowspan="2"> in one row silently shifted
+   * every later cell in the FOLLOWING row one column to the left (no
+   * cell there to advance past), so that row's cells got the wrong
+   * label entirely — not a cosmetic misalignment: a real price could
+   * end up captioned with the wrong column name on mobile. Confirmed
+   * before this fix: <tr><td rowspan="2">Pondelok</td><td>AD08</td>
+   * <td>60 €</td></tr><tr><td>AD20</td><td>70 €</td></tr> labelled
+   * the second row's cells "Deň"/"Stroj" instead of "Stroj"/"Cena".
    */
   function applyLabels(table) {
     var labels = headerLabels(table);
     if (!labels.length) {
       return;
     }
-    ownRows(table).forEach(function (row) {
+    var occupied = {};
+    ownRows(table).forEach(function (row, rowIndex) {
       if (row.parentElement && row.parentElement.tagName === "THEAD") {
         return;
       }
@@ -188,7 +192,16 @@
       }
       var colIndex = 0;
       Array.prototype.forEach.call(row.cells, function (cell) {
+        while (occupied[rowIndex + ":" + colIndex]) {
+          colIndex++;
+        }
         var colspan = parseInt(cell.getAttribute("colspan"), 10) || 1;
+        var rowspan = parseInt(cell.getAttribute("rowspan"), 10) || 1;
+        for (var rr = 0; rr < rowspan; rr++) {
+          for (var cc = 0; cc < colspan; cc++) {
+            occupied[(rowIndex + rr) + ":" + (colIndex + cc)] = true;
+          }
+        }
         if (cell.tagName === "TD" && !cell.hasAttribute("data-label") && labels[colIndex]) {
           cell.setAttribute("data-label", labels[colIndex]);
         }
