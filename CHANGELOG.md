@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1
+- Desktop table header font-size increased from `0.85em` to `0.95em` — was noticeably small.
+
 ## 2.0.0
 - Rebranded into the FG series as `plg_system_fgresponsivetables` (element, namespace `FG\Plugin\System\Fgresponsivetables`, language files, media destination, display name all renamed accordingly). Version numbering restarted at 2.0.0; the pre-rebrand history (originally built for mechanizmysevcik.sk and fnspza.sk, 1.0.0–1.9.7) is preserved in the project's earlier development notes, not repeated here.
 - Functionally identical to 1.9.7 at the point of rebrand: stacks `table.responsiv` into labelled, accessible cards on narrow screens (CSS Grid label/value layout, ARIA roles compensating for `display:block`, colspan/rowspan-aware header resolution, nested-table-safe DOM traversal), with admin-configurable breakpoint, card style, optional float-clearing, and an opt-in `legacy.css` for the original sites' generically-named helper classes (`.day-content`, `.sirka-*`, etc.).

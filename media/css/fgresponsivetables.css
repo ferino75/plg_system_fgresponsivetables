@@ -166,7 +166,7 @@ table.responsiv td {
 }
 
 table.responsiv th {
-  font-size: 0.85em;
+  font-size: 0.95em;
   font-weight: 700;
   letter-spacing: 0.04em;
   background: var(--rwd-head);
