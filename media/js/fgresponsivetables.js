@@ -400,7 +400,33 @@
     }
     target.setAttribute("data-rwd-observed", "1");
 
+    /**
+     * A ResizeObserver holds a strong internal reference to every
+     * target it observes, and a `window.addEventListener("resize",
+     * apply)` fallback listener is never automatically removed
+     * either — on a page that dynamically swaps tables in and out
+     * (an editor, an AJAX-refreshed panel), that's a growing memory
+     * leak plus pointless callback work for elements no longer on
+     * the page. Neither mechanism tells us when the target is
+     * removed, so this opportunistically checks `target.isConnected`
+     * whenever `apply` next runs (a later resize/observation) and
+     * tears itself down at that point — not instant, but correct,
+     * and simpler than tracking removals separately (e.g. via a
+     * second MutationObserver) for what should be a rare case.
+     */
+    var ro = null;
+    var resizeHandler = null;
+
     var apply = function () {
+      if (!target.isConnected) {
+        if (ro) {
+          ro.disconnect();
+        }
+        if (resizeHandler) {
+          window.removeEventListener("resize", resizeHandler);
+        }
+        return;
+      }
       var width = target.getBoundingClientRect().width;
       target.classList.toggle("is-stacked", width > 0 && width <= breakpoint);
       updateScrollShadow(target);
@@ -408,10 +434,11 @@
     };
     apply();
     if (typeof ResizeObserver !== "undefined") {
-      var ro = new ResizeObserver(apply);
+      ro = new ResizeObserver(apply);
       ro.observe(target);
     } else {
-      window.addEventListener("resize", apply);
+      resizeHandler = apply;
+      window.addEventListener("resize", resizeHandler);
     }
     target.addEventListener(
       "scroll",
