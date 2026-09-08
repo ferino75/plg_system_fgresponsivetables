@@ -1,12 +1,15 @@
 {
   "name": "plg_system_fgresponsivetables-tests",
   "private": true,
-  "description": "Dev-only dependency for the Playwright regression suite in tests/. Not part of the installed Joomla plugin.",
+  "description": "Dev-only dependencies for the Playwright regression suite and the release build's minification step. Not part of the installed Joomla plugin.",
   "scripts": {
     "test": "playwright test",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "minify": "bash scripts/minify.sh"
   },
   "devDependencies": {
-    "@playwright/test": "^1.48.0"
+    "@playwright/test": "^1.48.0",
+    "terser": "^5.36.0",
+    "clean-css-cli": "^5.6.3"
   }
 }

@@ -73,6 +73,26 @@ jobs:
       - name: Check JS syntax
         run: node --check media/js/fgresponsivetables.js
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install minification tools
+        run: npm install --no-save terser clean-css-cli
+
+      - name: Minify CSS/JS
+        # Generates media/js/fgresponsivetables.min.js and
+        # media/css/*.min.css (+ source maps) alongside the source
+        # files -- Joomla's Web Asset Manager automatically prefers
+        # the .min. version when present (falling back to source in
+        # Joomla Debug mode), so no changes to joomla.asset.json or
+        # the PHP are needed. See scripts/minify.sh.
+        run: bash scripts/minify.sh
+
+      - name: Check minified JS syntax
+        run: node --check media/js/fgresponsivetables.min.js
+
       - name: Package the install ZIP
         run: |
           version="${{ steps.version.outputs.version }}"

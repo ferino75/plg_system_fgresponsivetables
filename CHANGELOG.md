@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.30
+- Added minified CSS/JS to the release build, per a Grok review suggestion: `scripts/minify.sh` (terser for JS, clean-css for CSS) generates `fgresponsivetables.min.js` and `*.min.css`, each with a source map, run automatically by the release workflow before packaging. No changes to `joomla.asset.json` or the PHP were needed — confirmed against Joomla's own documentation that the Web Asset Manager automatically prefers a `.min.` file over its unminified counterpart in the same folder, falling back to the unminified version when Joomla Debug mode is on.
+- Minified output verified functionally identical to source, not just "minified without error": all 31 functional regression assertions from the Playwright suite re-run against the actual minified files (source-swapped into the same fixtures) and passed. Real measured size reduction: JS 22.8KB → 6.7KB, main CSS 16.8KB → 6.4KB, legacy CSS 2.0KB → 0.85KB.
+- Minified files and source maps are build output (regenerated fresh on every release), not committed to the repo — added to `.gitignore`.
+
 ## 2.0.29
 - Added debouncing (50ms) to the opt-in "Watch for dynamically added tables" MutationObserver, per a Grok review suggestion: a page builder or framework inserting a lot of content at once fires many mutation records in quick succession, and without debouncing each one independently scheduled its own `enhance()` call. Now a burst of activity collapses into a single call once things settle, instead of one per mutation.
 - Verified with an A/B test on the same scenario (8 tables inserted 10ms apart, well within the debounce window): 15 `enhance()` calls without debouncing vs. 4 with it, on identical input — a real, measured reduction, not just a theoretical one. All 8 tables still end up fully processed either way.

@@ -90,9 +90,13 @@ composer install    # (n/a — plain PHP/JS/CSS, no build step)
 1. Add the new version's entry at the top of `CHANGELOG.md` and push that to `master`.
 2. Tag it and push the tag: `git tag v2.0.25 && git push origin v2.0.25`.
 
-`.github/workflows/release.yml` then does everything else: bumps the version in `fgresponsivetables.xml`, `media/joomla.asset.json`, and `updates.xml`, regenerates `changelog.xml` from `CHANGELOG.md`, verifies all four agree (`build-check.sh`) and that the XML/JSON/JS are syntactically valid, packages the install ZIP, commits the regenerated files back to `master`, and creates the GitHub Release with the ZIP attached. It fails on purpose if `CHANGELOG.md`'s newest entry doesn't match the tag — a forgotten changelog entry can't silently ship.
+`.github/workflows/release.yml` then does everything else: bumps the version in `fgresponsivetables.xml`, `media/joomla.asset.json`, and `updates.xml`, regenerates `changelog.xml` from `CHANGELOG.md`, verifies all four agree (`build-check.sh`) and that the XML/JSON/JS are syntactically valid, generates minified CSS/JS (`scripts/minify.sh` — see below), packages the install ZIP, commits the regenerated files back to `master`, and creates the GitHub Release with the ZIP attached. It fails on purpose if `CHANGELOG.md`'s newest entry doesn't match the tag — a forgotten changelog entry can't silently ship.
 
 `scripts/set_version.py` and `scripts/build_changelog_xml.py` are also runnable by hand for local testing; `build-check.sh` re-checks version consistency any time.
+
+### Minified assets
+
+`scripts/minify.sh` (`npm run minify`) generates `media/js/fgresponsivetables.min.js` and `media/css/*.min.css`, each with a source map, alongside the real source files — not committed to the repo (they're build output, regenerated fresh on every release), but included in the release ZIP. No changes to `joomla.asset.json` or the PHP are needed for this to take effect: Joomla's Web Asset Manager automatically prefers a `.min.` file over its unminified counterpart when both exist in the same folder, and automatically falls back to the unminified version when Joomla's own Debug mode (Global Configuration) is on.
 
 ## License
 
