@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.32
+- Added an opt-in "Compose multi-level labels" setting, per a Grok review suggestion: for a grouped header (e.g. "Cena" split into "hodina"/"km"), the mobile card's label was always just the leaf column name ("hodina"), losing which group it belonged to. When enabled, `headerLabels()` composes the full path through every header row a column passes through instead ("Cena › hodina"), joined by a configurable separator (default " › "). Off by default, matching the existing leaf-only behaviour exactly.
+- Implementation tracks each spanned column's header text once per originating cell (not once per rowspan-duplicated row) during the same grid-building pass `headerLabels()` already did, so a column under a single, ungrouped header row is completely unaffected either way (its "path" is just one segment).
+- Verified via headless render on the same colspan/rowspan grouped-header table used for the v1.7.0 regression test: with the setting on, the body row's cells report `data-label="Cena › hodina"` / `"Cena › km"` (and "Stroj" — spanned via rowspan, a single origin cell — stays as plain "Stroj", not duplicated); with it off (default), labels are unchanged from before ("hodina"/"km"). All 31 functional regression assertions re-verified unaffected.
+- Translated the two new setting strings into all five supported languages (en-GB, sk-SK, de-DE, cs-CZ, pl-PL) — key parity re-verified (38 keys in every non-English file, none missing or extra).
+
 ## 2.0.31
 - Added three more languages, per a Grok review suggestion aimed at the wider regional Joomla community: `de-DE`, `cs-CZ`, and `pl-PL`, alongside the existing `en-GB` and `sk-SK`. Full translation of every admin-form label/description (34 strings) plus the site-facing `.sys.ini` description shown on the Discover/Install screen — registered in the manifest's `<languages>` block.
 - Verified all four non-English language files have exactly the same 34+2 keys as `en-GB` (no missing or extra strings) and that every value is a well-formed `KEY="value"` line with no unescaped internal quotes that would break Joomla's `.ini` parser.

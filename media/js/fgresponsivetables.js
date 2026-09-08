@@ -22,6 +22,8 @@
     scrollLabel: "Scrollable table",
     watchDom: false,
     autoClassSelector: "article table, .com-content table, .item-page table, .blog table, .category table",
+    multiLevelLabels: false,
+    multiLevelSeparator: " › ",
     exclude: "table.no-responsiv, .no-responsiv table",
   };
 
@@ -94,7 +96,18 @@
    * that column in the LAST header row — the most specific (leaf)
    * heading, e.g. "hodina"/"km" rather than the group "Cena".
    */
-  function headerLabels(table) {
+  /**
+   * By default returns just the LEAF label for each column — for a
+   * grouped header like "Cena" (colspan 2) over "hodina"/"km", that's
+   * "hodina"/"km" alone, with no indication either belongs under
+   * "Cena". Optionally (multiLevel), composes the full path through
+   * every header row that column passes through instead, joined by
+   * separator — "Cena › hodina" / "Cena › km" — so the mobile card's
+   * label doesn't lose the grouping context. A column under a single
+   * ungrouped header row is unaffected either way (its path is just
+   * one segment, same as the leaf).
+   */
+  function headerLabels(table, multiLevel, separator) {
     var headRows = table.tHead ? Array.prototype.slice.call(table.tHead.rows) : [];
     if (!headRows.length) {
       var first = table.rows[0];
@@ -110,6 +123,10 @@
     }
 
     var grid = [];
+    // paths[column] collects each spanned column's header text once
+    // per originating cell (not once per rowspan-duplicated row),
+    // in top-to-bottom order — exactly the "Group › Subgroup" path.
+    var paths = [];
     headRows.forEach(function (row, r) {
       grid[r] = grid[r] || [];
       var colIndex = 0;
@@ -126,9 +143,19 @@
             grid[r + rr][colIndex + cc] = text;
           }
         }
+        for (var pc = 0; pc < colspan; pc++) {
+          paths[colIndex + pc] = paths[colIndex + pc] || [];
+          paths[colIndex + pc].push(text);
+        }
         colIndex += colspan;
       });
     });
+
+    if (multiLevel) {
+      return paths.map(function (path) {
+        return path.join(separator);
+      });
+    }
 
     var lastRow = grid[grid.length - 1] || [];
     return lastRow.slice();
@@ -178,8 +205,8 @@
    * <td>60 €</td></tr><tr><td>AD20</td><td>70 €</td></tr> labelled
    * the second row's cells "Deň"/"Stroj" instead of "Stroj"/"Cena".
    */
-  function applyLabels(table) {
-    var labels = headerLabels(table);
+  function applyLabels(table, multiLevel, separator) {
+    var labels = headerLabels(table, multiLevel, separator);
     if (!labels.length) {
       return;
     }
@@ -522,7 +549,7 @@
       markHeaderRow(table);
 
       if (opts.autoLabels !== false) {
-        applyLabels(table);
+        applyLabels(table, opts.multiLevelLabels, opts.multiLevelSeparator);
       }
 
       if (opts.ariaRoles !== false) {
