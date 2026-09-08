@@ -285,6 +285,47 @@ test.describe("rtl.html — dir=rtl support (v2.0.35)", () => {
   });
 });
 
+test.describe("rwdTables:enhanced custom event (v2.0.37)", () => {
+  test("does not re-fire for already-enhanced tables on a repeated enhance() call", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 1200 });
+    await page.goto(fixture("basic.html"));
+    await page.evaluate(() => {
+      window.__events = [];
+      document.addEventListener("rwdTables:enhanced", (e) => {
+        window.__events.push({ id: e.detail.table.id, wasReady: e.detail.table.getAttribute("data-rwd-ready") });
+      });
+    });
+    // basic.html's own script already ran before this listener was
+    // attached; re-running enhance() should be a no-op for these
+    // already-processed tables (data-rwd-ready guard) — exactly the
+    // behaviour under test.
+    await page.evaluate(() => window.rwdTablesEnhance());
+    await page.waitForTimeout(100);
+    const events = await page.evaluate(() => window.__events);
+    expect(events.length).toBe(0);
+  });
+
+  test("fires exactly once for a newly-added table, with detail.table already fully processed", async ({ page }) => {
+    await page.goto(fixture("shared-wrapper.html"));
+    const events = await page.evaluate(() => {
+      const seen = [];
+      document.addEventListener("rwdTables:enhanced", (e) => {
+        seen.push({ id: e.detail.table.id, wasReady: e.detail.table.getAttribute("data-rwd-ready") });
+      });
+      const t = document.createElement("table");
+      t.className = "responsiv";
+      t.id = "t-fresh";
+      t.innerHTML = "<thead><tr><th>A</th></tr></thead><tbody><tr><td>1</td></tr></tbody>";
+      document.body.appendChild(t);
+      window.rwdTablesEnhance();
+      return seen;
+    });
+    expect(events.length).toBe(1);
+    expect(events[0].id).toBe("t-fresh");
+    expect(events[0].wasReady).toBe("1");
+  });
+});
+
 test.describe("scroll-only.html — rwd-scroll-only opt-in (v2.0.36)", () => {
   test("a table with rwd-scroll-only never stacks and scrolls horizontally instead, even below the breakpoint", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 500 });

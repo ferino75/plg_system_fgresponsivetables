@@ -45,6 +45,15 @@ A Joomla 4/5/6 system plugin that turns any `<table class="responsiv">` into a l
 
 The `responsiv` class is required unless "Enhance all article tables" is turned on in the plugin settings. `data-label` is filled in automatically from the table header; add it manually only if you want a different label than the header text.
 
+For integrating with another script, listen for `rwdTables:enhanced` on `document` — it fires once per table, right after that table's enhancement (labels, ARIA roles, wrap, everything) is fully done:
+
+```js
+document.addEventListener('rwdTables:enhanced', function (e) {
+  var table = e.detail.table;
+  // table is already fully enhanced at this point
+});
+```
+
 To exclude a specific table: `<table class="no-responsiv">`.
 
 Two more helper classes on the table/cells themselves:

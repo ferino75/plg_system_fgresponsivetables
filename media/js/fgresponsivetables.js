@@ -596,6 +596,17 @@
         target.style.setProperty("--rwd-min-width", minWidth + "px");
       }
       observeWidth(target, table, breakpoint, opts.scrollLabel);
+
+      // Fires once per table (data-rwd-ready already guards this
+      // whole block against reprocessing), after every other step —
+      // labels, ARIA roles, wrap, min-width, the resize observer —
+      // has already run, so a listener sees the table in its final
+      // enhanced state, not a half-finished one. detail.table is the
+      // <table> element itself (not the wrap), so a listener can
+      // reach both via table.closest('.rwd-table-wrap').
+      if (typeof CustomEvent !== "undefined") {
+        document.dispatchEvent(new CustomEvent("rwdTables:enhanced", { detail: { table: table } }));
+      }
     });
   }
 
