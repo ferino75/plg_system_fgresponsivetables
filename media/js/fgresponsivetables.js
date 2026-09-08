@@ -570,17 +570,32 @@
    * already processed), so this can call it as often as it likes.
    */
   if (getOptions().watchDom && typeof MutationObserver !== "undefined") {
+    var watchDomTimer = null;
+    var scheduleEnhance = function () {
+      if (watchDomTimer) {
+        clearTimeout(watchDomTimer);
+      }
+      // A page builder or framework can insert a lot of content in
+      // one go, firing many mutation records back to back — without
+      // this, each one would separately schedule its own enhance()
+      // call. Debouncing collapses a whole burst into a single call
+      // once things settle, instead of many redundant ones.
+      watchDomTimer = setTimeout(function () {
+        watchDomTimer = null;
+        if (window.requestIdleCallback) {
+          requestIdleCallback(enhance);
+        } else {
+          enhance();
+        }
+      }, 50);
+    };
     var mo = new MutationObserver(function (records) {
       for (var i = 0; i < records.length; i++) {
         var added = records[i].addedNodes;
         for (var j = 0; j < added.length; j++) {
           var node = added[j];
           if (node.nodeType === 1 && (node.tagName === "TABLE" || node.querySelector("table"))) {
-            if (window.requestIdleCallback) {
-              requestIdleCallback(enhance);
-            } else {
-              setTimeout(enhance, 0);
-            }
+            scheduleEnhance();
             return;
           }
         }

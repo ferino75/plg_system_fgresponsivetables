@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.29
+- Added debouncing (50ms) to the opt-in "Watch for dynamically added tables" MutationObserver, per a Grok review suggestion: a page builder or framework inserting a lot of content at once fires many mutation records in quick succession, and without debouncing each one independently scheduled its own `enhance()` call. Now a burst of activity collapses into a single call once things settle, instead of one per mutation.
+- Verified with an A/B test on the same scenario (8 tables inserted 10ms apart, well within the debounce window): 15 `enhance()` calls without debouncing vs. 4 with it, on identical input — a real, measured reduction, not just a theoretical one. All 8 tables still end up fully processed either way.
+
 ## 2.0.28
 - Fixed five smaller findings from a P3 review pass: a Czech-ism typo in the Slovak "Load legacy compatible styles" description (úplně → úplne); renamed the script Web Asset from `plg_system_fgresponsivetables.tables` to `.tables-script` (was legal since Joomla indexes by type+name, but matched core convention less than a distinct name); added `declare(strict_types=1)` to `Fgresponsivetables.php` (free, since every method already has a return type); documented `.responsiv-fixed` (`table-layout: fixed`) and `.rwd-nowrap` in README.md (README.txt already had the latter); made the `autoClass` container selector list configurable (`auto_class_selector`, shown only when "Enhance all article tables" is on) instead of hardcoded to Joomla core `com_content` markup, since templates like Helix, JD, or T4 wrap content differently.
 - All 31 functional regression assertions re-verified unaffected by these changes; the new `auto_class_selector` setting itself verified via headless render (a table inside a non-default container class gets `.responsiv` added when a matching custom selector is configured).
