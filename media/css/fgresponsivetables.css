@@ -174,7 +174,7 @@ table.responsiv caption {
   font-size: 1.25em;
   font-weight: 600;
   margin: 0.5em 0 0.75em;
-  text-align: left;
+  text-align: start;
   color: var(--rwd-label);
 }
 
@@ -194,7 +194,7 @@ table.responsiv tbody tr:hover {
 table.responsiv th,
 table.responsiv td {
   padding: 0.625em 0.75em;
-  text-align: left;
+  text-align: start;
   vertical-align: top;
   border: 1px solid var(--rwd-border);
 }
@@ -350,7 +350,7 @@ table.responsiv.is-stacked tfoot th {
   border-bottom: 1px solid var(--rwd-border);
   background: var(--rwd-head);
   padding: 0.625em 0.75em;
-  text-align: left;
+  text-align: start;
 }
 
 /* Subtle zebra striping between the lines inside a card — a semi-
@@ -364,14 +364,18 @@ table.responsiv.is-stacked td:nth-child(even) {
 /* Label + value as two real grid items (JS wraps the value in
    span.rwd-value). The label sits in the flexible first column and
    can wrap onto a second line if it's long; the value sits in its
-   own column on the right. Both tracks use minmax(0, ...) and the
+   own column on the far side. Both tracks use minmax(0, ...) and the
    value gets min-width:0 — without that, a grid track's default
    minimum is its content's min-content size, so a long unwrapped
    value (a sentence, a note — not just a short price) would force
    the column wider than the card and overflow it sideways, exactly
    what plain "auto" silently allowed. Grid still gives label and
    value their own track each, so — unlike float or flex-basis
-   tricks — there's no code path where they end up sharing a line. */
+   tricks — there's no code path where they end up sharing a line.
+   Grid track order and text-align: start/end (not left/right) below
+   both follow the inline direction on their own — under dir="rtl"
+   the label ends up on the right and the value's text end-aligns to
+   the left, with no separate RTL rule needed. */
 .rwd-table-wrap.is-stacked table.responsiv td[data-label]::before,
 table.responsiv.is-stacked td[data-label]::before {
   content: attr(data-label);
@@ -382,7 +386,7 @@ table.responsiv.is-stacked td[data-label]::before {
 
 .rwd-table-wrap.is-stacked table.responsiv td .rwd-value,
 table.responsiv.is-stacked td .rwd-value {
-  text-align: right;
+  text-align: end;
   min-width: 0;
   white-space: normal;
   overflow-wrap: anywhere;

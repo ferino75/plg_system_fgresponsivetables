@@ -18,7 +18,7 @@ function fixture(name) {
  * these screenshots are the visual evidence layer the same way the
  * external review used them to catch the four P1 bugs.
  */
-for (const fixtureName of ["basic.html", "shared-wrapper.html", "min-width.html", "dark-mode.html", "card-style-lines.html"]) {
+for (const fixtureName of ["basic.html", "shared-wrapper.html", "min-width.html", "dark-mode.html", "card-style-lines.html", "rtl.html"]) {
   test.describe(`screenshots: ${fixtureName}`, () => {
     for (const width of VIEWPORTS) {
       test(`${fixtureName} @ ${width}px`, async ({ page }) => {
@@ -251,5 +251,36 @@ test.describe("card-style-lines.html", () => {
     }));
     expect(info.boxShadow).toBe("none");
     expect(["0px", "0px 0px 0px 0px"]).toContain(info.borderRadius);
+  });
+});
+
+test.describe("rtl.html — dir=rtl support (v2.0.35)", () => {
+  test("desktop header text-align resolves logically (start), not hardcoded left", async ({ page }) => {
+    await page.setViewportSize({ width: 700, height: 300 });
+    await page.goto(fixture("rtl.html"));
+    const textAlign = await page.locator("#t-rtl th").first().evaluate((th) => getComputedStyle(th).textAlign);
+    expect(textAlign).toBe("start");
+  });
+
+  test("stacked card's grid mirrors under RTL: the value sits on the visual left, not the right", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 300 });
+    await page.goto(fixture("rtl.html"));
+    await page.waitForTimeout(250);
+
+    const info = await page.evaluate(() => {
+      const td = document.querySelector("#t-rtl td[data-label]");
+      const value = td.querySelector(".rwd-value");
+      const tdRect = td.getBoundingClientRect();
+      const valueRect = value.getBoundingClientRect();
+      return {
+        textAlign: getComputedStyle(value).textAlign,
+        // In RTL the value column should sit near the LEFT edge of
+        // its cell (mirrored from LTR, where it sits near the right).
+        distanceFromLeftEdge: valueRect.left - tdRect.left,
+        distanceFromRightEdge: tdRect.right - valueRect.right,
+      };
+    });
+    expect(info.textAlign).toBe("end");
+    expect(info.distanceFromLeftEdge).toBeLessThan(info.distanceFromRightEdge);
   });
 });
