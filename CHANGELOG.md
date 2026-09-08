@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.38
+- Added a "Presets" section to README.md, per a Grok review suggestion (scoped down from a full export/import feature, which would need a custom admin controller a system plugin doesn't have): three field-value combinations to copy into the settings screen by hand — Minimal (a small site, nothing extra), Full (every feature on), and Performance (a content-heavy site prioritizing page weight, e.g. "Load only on com_content pages" on, legacy CSS and the DOM-watching MutationObserver off). Documentation only, no code changes.
+- Every field name referenced was cross-checked against the actual English label strings in the manifest/language file, so an admin can find each one by its exact on-screen name.
+
 ## 2.0.37
 - Added a `rwdTables:enhanced` custom event, per a Grok review suggestion, for integrating with other scripts: `document.dispatchEvent(new CustomEvent('rwdTables:enhanced', { detail: { table } }))` fires once per table, right after every other step of that table's processing — labels, ARIA roles, wrap, min-width, the resize observer — is already done, so a listener always sees a fully-enhanced table, never a half-finished one. Naturally fires only once per table thanks to the existing `data-rwd-ready` guard: a repeated `enhance()`/`window.rwdTablesEnhance()` call (including via the opt-in `MutationObserver`) is a no-op for tables already processed, so listeners don't need their own deduplication.
 - Verified via headless render: the event fires exactly once per table on initial load with `detail.table.getAttribute('data-rwd-ready')` already `"1"` and the wrap already in place at the moment the listener runs; a repeated manual `window.rwdTablesEnhance()` call does not re-fire it for those same tables; and a genuinely new table added afterward does fire it, exactly once, fully processed.

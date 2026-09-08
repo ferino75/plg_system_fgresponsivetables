@@ -113,6 +113,53 @@ composer install    # (n/a — plain PHP/JS/CSS, no build step)
 
 `scripts/minify.sh` (`npm run minify`) generates `media/js/fgresponsivetables.min.js` and `media/css/*.min.css`, each with a source map, alongside the real source files — not committed to the repo (they're build output, regenerated fresh on every release), but included in the release ZIP. No changes to `joomla.asset.json` or the PHP are needed for this to take effect: Joomla's Web Asset Manager automatically prefers a `.min.` file over its unminified counterpart when both exist in the same folder, and automatically falls back to the unminified version when Joomla's own Debug mode (Global Configuration) is on.
 
+## Presets
+
+Not an automated feature — just three field combinations worth starting from, to copy into the plugin's settings screen by hand, depending on what the site needs.
+
+### Minimal — a small site, simple price/spec tables, nothing extra
+
+| Field | Value |
+|---|---|
+| Fill data-label | On |
+| Enhance all article tables | Off |
+| Compose multi-level labels | Off |
+| Mobile card style | Plain dividing lines |
+| Watch for dynamically added tables | Off |
+| Load only on com_content pages | Off |
+| Load legacy compatible styles | Off |
+| Minimum table width (px) | 0 (off) |
+| Everything else | leave at default |
+
+### Full — use everything the plugin offers
+
+| Field | Value |
+|---|---|
+| Fill data-label | On |
+| Enhance all article tables | On (set Container selector to match your template if it isn't Joomla core markup) |
+| Compose multi-level labels | On |
+| Mobile card style | Bordered card |
+| Clear floats before the table | On, if the site has float-based layouts near tables |
+| Minimum table width (px) | 480 (or whatever fits your narrowest realistic column set) |
+| Watch for dynamically added tables | On, if the site uses AJAX-loaded content, accordions, or a page builder |
+| Load only on com_content pages | Off — a table living in a module or another component still needs to work |
+| Load legacy compatible styles | On, if migrating from the original tabulka.css |
+
+### Performance — a content-heavy site, prioritize page weight
+
+| Field | Value |
+|---|---|
+| Fill data-label | On |
+| Enhance all article tables | Off (skips a second DOM scan) |
+| Compose multi-level labels | Off |
+| Mobile card style | Plain dividing lines |
+| Watch for dynamically added tables | Off (no standing `MutationObserver`) |
+| Load only on com_content pages | On — the actual measurable win, skips ~10KB CSS/JS on every page without a table |
+| Load legacy compatible styles | Off (skips loading `legacy.css` entirely) |
+| Minimum table width (px) | 0 (off) |
+
+Accessibility (ARIA roles) stays **On** in all three — it costs a handful of attribute writes, never worth trading away.
+
 ## License
 
 GPL-2.0-or-later — see [LICENSE.txt](LICENSE.txt).
