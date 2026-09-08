@@ -206,6 +206,28 @@ test.describe("min-width.html — v2.0.6 / v2.0.7 / v2.0.10", () => {
     expect(info.role).toBe("region");
     expect(info.ariaLabel).toBeTruthy();
   });
+
+  test("a scrollable table with its own <caption> uses aria-labelledby pointing to it, not aria-label (v2.0.34)", async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 600 });
+    await page.goto(fixture("min-width.html"));
+    await page.waitForTimeout(250);
+
+    const info = await page.evaluate(() => {
+      const table = document.getElementById("t-scroll-caption");
+      const wrap = table.closest(".rwd-table-wrap");
+      const labelledbyId = wrap.getAttribute("aria-labelledby");
+      return {
+        ariaLabelledby: labelledbyId,
+        ariaLabel: wrap.getAttribute("aria-label"),
+        captionId: table.caption ? table.caption.id : null,
+        pointsToRealElement: labelledbyId ? !!document.getElementById(labelledbyId) : false,
+      };
+    });
+    expect(info.ariaLabelledby).toBeTruthy();
+    expect(info.ariaLabel).toBeNull();
+    expect(info.ariaLabelledby).toBe(info.captionId);
+    expect(info.pointsToRealElement).toBe(true);
+  });
 });
 
 test.describe("dark-mode.html — v2.0.13", () => {

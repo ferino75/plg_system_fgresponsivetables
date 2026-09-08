@@ -404,11 +404,19 @@
    * A focusable scroll region with no accessible name is its own
    * problem: a screen reader announces the Tab stop with nothing to
    * identify it by. The recommended pattern for a scrollable table is
-   * role="region" plus a name — from the table's own <caption> when
-   * there is one, otherwise a translated fallback string passed in
-   * from PHP (frontend has no language file of its own to pull from;
-   * see the PHP-side loadLanguage()/Text::_() call that produces it).
+   * role="region" plus a name. When the table has its own <caption>,
+   * point aria-labelledby at it (assigning it an id if it doesn't
+   * already have one, and never overwriting an existing one) rather
+   * than copying its text into aria-label — a live reference survives
+   * any formatting inside the caption and stays in sync if it ever
+   * changes, instead of a one-time flattened copy. Falls back to
+   * aria-label with a translated string passed in from PHP when there
+   * is no caption (frontend has no language file of its own to pull
+   * from; see the PHP-side loadLanguage()/Text::_() call that
+   * produces it).
    */
+  var rwdCaptionIdCounter = 0;
+
   function updateFocusability(target, table, scrollLabel) {
     var scrollable = target.scrollWidth > target.clientWidth + 1 && !target.classList.contains("is-stacked");
     if (scrollable) {
@@ -417,15 +425,25 @@
         target.setAttribute("data-rwd-tabindex", "1");
       }
       if (target.getAttribute("data-rwd-tabindex") === "1") {
-        var label = (table.caption && cleanText(table.caption.textContent)) || scrollLabel || "Scrollable table";
         target.setAttribute("role", "region");
-        target.setAttribute("aria-label", label);
+        if (table.caption) {
+          if (!table.caption.id) {
+            rwdCaptionIdCounter++;
+            table.caption.id = "rwd-caption-" + rwdCaptionIdCounter;
+          }
+          target.setAttribute("aria-labelledby", table.caption.id);
+          target.removeAttribute("aria-label");
+        } else {
+          target.setAttribute("aria-label", scrollLabel || "Scrollable table");
+          target.removeAttribute("aria-labelledby");
+        }
       }
     } else if (target.getAttribute("data-rwd-tabindex") === "1") {
       target.removeAttribute("tabindex");
       target.removeAttribute("data-rwd-tabindex");
       target.removeAttribute("role");
       target.removeAttribute("aria-label");
+      target.removeAttribute("aria-labelledby");
     }
   }
 
