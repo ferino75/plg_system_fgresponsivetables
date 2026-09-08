@@ -51,6 +51,13 @@ Tabuľku, ktorej stĺpce sa nemajú pri načítaní obsahu preskakovať
 
   <table class="responsiv responsiv-fixed">...</table>
 
+Porovnávaciu maticu, ktorá sa nemá nikdy skladať do kariet (napr.
+tabuľka s mnohými stĺpcami, kde má zmysel iba porovnanie riadku
+naprieč všetkými stĺpcami naraz) — zostane skutočnou tabuľkou a
+namiesto skladania bude horizontálne skrolovať:
+
+  <table class="responsiv rwd-scroll-only">...</table>
+
 Pomocné triedy (zachované z pôvodného CSS, len v legacy.css)
 --------------------------------------------------------------
   sirka-25, sirka-30

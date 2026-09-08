@@ -170,6 +170,19 @@ table.responsiv.responsiv-fixed {
   table-layout: fixed;
 }
 
+/* Opt-in per table: class="rwd-scroll-only" (comparison matrices,
+   where turning each row into a stacked label:value card list loses
+   the row/column relationship the table depends on). JS already
+   skips adding .is-stacked for this class regardless of width; this
+   half stops the browser's own auto table-layout from squeezing
+   columns to fit — the same "just let it overflow and scroll"
+   principle as the --rwd-min-width setting, but scoped to one table
+   instead of every non-stacked table on the site. */
+table.responsiv.rwd-scroll-only th,
+table.responsiv.rwd-scroll-only td {
+  white-space: nowrap;
+}
+
 table.responsiv caption {
   font-size: 1.25em;
   font-weight: 600;

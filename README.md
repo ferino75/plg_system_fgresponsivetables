@@ -51,6 +51,7 @@ Two more helper classes on the table/cells themselves:
 
 - `<table class="responsiv responsiv-fixed">` — forces `table-layout: fixed` on the desktop table, useful when column widths jump around as content loads.
 - `<td class="rwd-nowrap" data-label="Price">€195</td>` — a value that's always short (a price, a code) and should never wrap onto a second line even next to a long label. The mobile card lets the value wrap by default, since that's safer for a longer piece of text (a note, a description).
+- `<table class="responsiv rwd-scroll-only">` — never stacks into cards, regardless of width; stays a real table and scrolls horizontally instead. For a comparison matrix (many columns, each row meaningful only alongside the others), turning each row into its own label:value card list loses the grid relationship the table depends on. Per-table, so a site can mix ordinary stacking price tables with scroll-only comparison matrices.
 
 See `README.txt` (Slovak) for the full list of helper classes, including the opt-in `legacy.css` compatibility layer for sites migrating from the original tabulka.css.
 

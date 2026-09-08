@@ -18,7 +18,7 @@ function fixture(name) {
  * these screenshots are the visual evidence layer the same way the
  * external review used them to catch the four P1 bugs.
  */
-for (const fixtureName of ["basic.html", "shared-wrapper.html", "min-width.html", "dark-mode.html", "card-style-lines.html", "rtl.html"]) {
+for (const fixtureName of ["basic.html", "shared-wrapper.html", "min-width.html", "dark-mode.html", "card-style-lines.html", "rtl.html", "scroll-only.html"]) {
   test.describe(`screenshots: ${fixtureName}`, () => {
     for (const width of VIEWPORTS) {
       test(`${fixtureName} @ ${width}px`, async ({ page }) => {
@@ -282,5 +282,39 @@ test.describe("rtl.html — dir=rtl support (v2.0.35)", () => {
     });
     expect(info.textAlign).toBe("end");
     expect(info.distanceFromLeftEdge).toBeLessThan(info.distanceFromRightEdge);
+  });
+});
+
+test.describe("scroll-only.html — rwd-scroll-only opt-in (v2.0.36)", () => {
+  test("a table with rwd-scroll-only never stacks and scrolls horizontally instead, even below the breakpoint", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 500 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const info = await page.evaluate(() => {
+      const wrap = document.getElementById("t-matrix").closest(".rwd-table-wrap");
+      return {
+        isStacked: wrap.classList.contains("is-stacked"),
+        overflow: wrap.scrollWidth - wrap.clientWidth,
+        tabindex: wrap.getAttribute("tabindex"),
+        role: wrap.getAttribute("role"),
+      };
+    });
+    expect(info.isStacked).toBe(false);
+    expect(info.overflow).toBeGreaterThan(0);
+    expect(info.tabindex).toBe("0");
+    expect(info.role).toBe("region");
+  });
+
+  test("an ordinary table on the same page still stacks normally (the class is per-table, not global)", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 500 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const isStacked = await page.evaluate(() => {
+      const wrap = document.getElementById("t-normal").closest(".rwd-table-wrap");
+      return wrap.classList.contains("is-stacked");
+    });
+    expect(isStacked).toBe(true);
   });
 });

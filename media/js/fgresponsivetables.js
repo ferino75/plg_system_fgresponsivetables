@@ -481,7 +481,15 @@
         return;
       }
       var width = target.getBoundingClientRect().width;
-      var isStacked = width > 0 && width <= breakpoint;
+      // Opt-in per table: class="rwd-scroll-only" (a comparison
+      // matrix, say) never stacks into cards regardless of width —
+      // turning each row into a label:value card list loses the
+      // grid relationship a matrix depends on. It stays a real table
+      // and scrolls horizontally instead (matching legacy.css's
+      // white-space:nowrap treatment for it, so columns never get
+      // squeezed either — the same "just let it scroll" pattern as
+      // the min-width setting, just per-table instead of global).
+      var isStacked = !table.classList.contains("rwd-scroll-only") && width > 0 && width <= breakpoint;
       if (isStacked) {
         // Wrapping every td[data-label]'s content in span.rwd-value
         // is a real DOM mutation — it can break a template's or a
