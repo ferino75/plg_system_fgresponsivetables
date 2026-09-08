@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
-	<version>2.0.30</version>
+	<version>2.0.28</version>
 	<description>PLG_SYSTEM_FGRESPONSIVETABLES_XML_DESCRIPTION</description>
 	<namespace path="src">FG\Plugin\System\Fgresponsivetables</namespace>
 	<changelogurl>https://raw.githubusercontent.com/ferino75/plg_system_fgresponsivetables/master/changelog.xml</changelogurl>
@@ -32,6 +32,12 @@
 		<language tag="en-GB">language/en-GB/plg_system_fgresponsivetables.sys.ini</language>
 		<language tag="sk-SK">language/sk-SK/plg_system_fgresponsivetables.ini</language>
 		<language tag="sk-SK">language/sk-SK/plg_system_fgresponsivetables.sys.ini</language>
+		<language tag="de-DE">language/de-DE/plg_system_fgresponsivetables.ini</language>
+		<language tag="de-DE">language/de-DE/plg_system_fgresponsivetables.sys.ini</language>
+		<language tag="cs-CZ">language/cs-CZ/plg_system_fgresponsivetables.ini</language>
+		<language tag="cs-CZ">language/cs-CZ/plg_system_fgresponsivetables.sys.ini</language>
+		<language tag="pl-PL">language/pl-PL/plg_system_fgresponsivetables.ini</language>
+		<language tag="pl-PL">language/pl-PL/plg_system_fgresponsivetables.sys.ini</language>
 	</languages>
 	<config>
 		<fields name="params">

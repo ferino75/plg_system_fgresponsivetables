@@ -3,25 +3,6 @@
 	<changelog>
 		<element>fgresponsivetables</element>
 		<type>plugin</type>
-		<version>2.0.30</version>
-		<fix>
-			<item>Added minified CSS/JS to the release build, per a Grok review suggestion: scripts/minify.sh (terser for JS, clean-css for CSS) generates fgresponsivetables.min.js and *.min.css, each with a source map, run automatically by the release workflow before packaging. No changes to joomla.asset.json or the PHP were needed, confirmed against Joomla's own documentation that the Web Asset Manager automatically prefers a .min. file over its unminified counterpart in the same folder, falling back to the unminified version when Joomla Debug mode is on.</item>
-			<item>Minified output verified functionally identical to source, not just "minified without error": all 31 functional regression assertions from the Playwright suite re-run against the actual minified files (source-swapped into the same fixtures) and passed. Real measured size reduction: JS 22.8KB → 6.7KB, main CSS 16.8KB → 6.4KB, legacy CSS 2.0KB → 0.85KB.</item>
-			<item>Minified files and source maps are build output (regenerated fresh on every release), not committed to the repo, added to .gitignore.</item>
-		</fix>
-	</changelog>
-	<changelog>
-		<element>fgresponsivetables</element>
-		<type>plugin</type>
-		<version>2.0.29</version>
-		<fix>
-			<item>Added debouncing (50ms) to the opt-in "Watch for dynamically added tables" MutationObserver, per a Grok review suggestion: a page builder or framework inserting a lot of content at once fires many mutation records in quick succession, and without debouncing each one independently scheduled its own enhance() call. Now a burst of activity collapses into a single call once things settle, instead of one per mutation.</item>
-			<item>Verified with an A/B test on the same scenario (8 tables inserted 10ms apart, well within the debounce window): 15 enhance() calls without debouncing vs. 4 with it, on identical input, a real, measured reduction, not just a theoretical one. All 8 tables still end up fully processed either way.</item>
-		</fix>
-	</changelog>
-	<changelog>
-		<element>fgresponsivetables</element>
-		<type>plugin</type>
 		<version>2.0.28</version>
 		<fix>
 			<item>Fixed five smaller findings from a P3 review pass: a Czech-ism typo in the Slovak "Load legacy compatible styles" description (úplně → úplne); renamed the script Web Asset from plg_system_fgresponsivetables.tables to .tables-script (was legal since Joomla indexes by type+name, but matched core convention less than a distinct name); added declare(strict_types=1) to Fgresponsivetables.php (free, since every method already has a return type); documented .responsiv-fixed (table-layout: fixed) and .rwd-nowrap in README.md (README.txt already had the latter); made the autoClass container selector list configurable (auto_class_selector, shown only when "Enhance all article tables" is on) instead of hardcoded to Joomla core com_content markup, since templates like Helix, JD, or T4 wrap content differently.</item>

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.31
+- Added three more languages, per a Grok review suggestion aimed at the wider regional Joomla community: `de-DE`, `cs-CZ`, and `pl-PL`, alongside the existing `en-GB` and `sk-SK`. Full translation of every admin-form label/description (34 strings) plus the site-facing `.sys.ini` description shown on the Discover/Install screen — registered in the manifest's `<languages>` block.
+- Verified all four non-English language files have exactly the same 34+2 keys as `en-GB` (no missing or extra strings) and that every value is a well-formed `KEY="value"` line with no unescaped internal quotes that would break Joomla's `.ini` parser.
+
 ## 2.0.30
 - Added minified CSS/JS to the release build, per a Grok review suggestion: `scripts/minify.sh` (terser for JS, clean-css for CSS) generates `fgresponsivetables.min.js` and `*.min.css`, each with a source map, run automatically by the release workflow before packaging. No changes to `joomla.asset.json` or the PHP were needed — confirmed against Joomla's own documentation that the Web Asset Manager automatically prefers a `.min.` file over its unminified counterpart in the same folder, falling back to the unminified version when Joomla Debug mode is on.
 - Minified output verified functionally identical to source, not just "minified without error": all 31 functional regression assertions from the Playwright suite re-run against the actual minified files (source-swapped into the same fixtures) and passed. Real measured size reduction: JS 22.8KB → 6.7KB, main CSS 16.8KB → 6.4KB, legacy CSS 2.0KB → 0.85KB.
