@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail></authorEmail>
 	<authorUrl></authorUrl>
-	<version>2.0.32</version>
+	<version>2.0.28</version>
 	<description>PLG_SYSTEM_FGRESPONSIVETABLES_XML_DESCRIPTION</description>
 	<namespace path="src">FG\Plugin\System\Fgresponsivetables</namespace>
 	<changelogurl>https://raw.githubusercontent.com/ferino75/plg_system_fgresponsivetables/master/changelog.xml</changelogurl>
@@ -210,6 +210,50 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
+			</fieldset>
+			<fieldset name="appearance" label="PLG_SYSTEM_FGRESPONSIVETABLES_FIELDSET_APPEARANCE">
+				<field
+					name="appearance_border_color"
+					type="color"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_BORDER_COLOR_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_BORDER_COLOR_DESC"
+					default=""
+				/>
+				<field
+					name="appearance_ink_color"
+					type="color"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_INK_COLOR_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_INK_COLOR_DESC"
+					default=""
+				/>
+				<field
+					name="appearance_head_color"
+					type="color"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_HEAD_COLOR_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_HEAD_COLOR_DESC"
+					default=""
+				/>
+				<field
+					name="appearance_label_color"
+					type="color"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_LABEL_COLOR_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_LABEL_COLOR_DESC"
+					default=""
+				/>
+				<field
+					name="appearance_card_radius"
+					type="text"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_CARD_RADIUS_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_CARD_RADIUS_DESC"
+					default=""
+				/>
+				<field
+					name="appearance_card_shadow"
+					type="text"
+					label="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_CARD_SHADOW_LABEL"
+					description="PLG_SYSTEM_FGRESPONSIVETABLES_APPEARANCE_CARD_SHADOW_DESC"
+					default=""
+				/>
 			</fieldset>
 			<fieldset name="compatibility" label="PLG_SYSTEM_FGRESPONSIVETABLES_FIELDSET_COMPATIBILITY">
 				<field

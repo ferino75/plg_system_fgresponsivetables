@@ -63,6 +63,7 @@ See `README.txt` (Slovak) for the full list of helper classes, including the opt
 | Container selector | (the list above) | Only shown when "Enhance all article tables" is on. The CSS selector list itself — replace it for templates (Helix, JD, T4, ...) that wrap content differently than Joomla core does |
 | Compose multi-level labels | Off | For a grouped header (`Cena` split into `hodina`/`km`), compose the full path (`Cena › hodina`) instead of just the leaf column name |
 | Level separator | ` › ` | Only shown when "Compose multi-level labels" is on |
+| Border color, Text color, Header background color, Label text color, Card corner radius, Card shadow | (all empty) | Quick branding overrides for the six most visually significant CSS custom properties, without a `custom.css` edit — output as a small inline `:root{...}` block only when at least one is set. Covers the default (light) palette only; dark-mode-specific colors still need `custom.css` |
 | Fill data-label | On | Copy missing `data-label` from the matching header column |
 | Wrap table | On | Wrap in `.rwd-table-wrap` so stacking follows container width |
 | Accessibility (ARIA roles) | On | Add `role`/`scope` attributes compensating for mobile `display:block` |

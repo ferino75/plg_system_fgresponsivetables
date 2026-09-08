@@ -84,6 +84,12 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             $wa->useStyle('plg_system_fgresponsivetables.legacy');
         }
 
+        $appearanceCss = $this->buildAppearanceOverrideCss();
+
+        if ($appearanceCss !== '') {
+            $document->addStyleDeclaration($appearanceCss);
+        }
+
         // Plugin language files are installed under administrator/language
         // regardless of client (Installer::parseLanguages() is called with
         // client id 1 for plugins), and $autoloadLanguage was removed in
@@ -114,5 +120,58 @@ final class Fgresponsivetables extends CMSPlugin implements SubscriberInterface
             'multiLevelSeparator' => (string) $this->params->get('multi_level_separator', ' › '),
             'exclude'     => (string) $this->params->get('exclude', 'table.no-responsiv, .no-responsiv table'),
         ]);
+    }
+
+    /**
+     * Builds a :root{...} declaration overriding one or more of the
+     * plugin's CSS custom properties from plain admin fields (border/
+     * text/header/accent color, card radius, card shadow) — so a quick
+     * branding tweak doesn't need a custom.css edit. Empty fields are
+     * skipped entirely; if nothing is set, this returns an empty
+     * string and no <style> tag is added at all. Covers the default
+     * (light) palette only — dark-mode-specific colors still need
+     * custom.css, since doubling every field for a dark variant would
+     * make this settings screen unwieldy for what's meant to be a
+     * quick way to match a site's brand colors, not a full theme editor.
+     *
+     * @return  string  A :root{...} CSS block, or '' if nothing is set.
+     *
+     * @since   2.0.33
+     */
+    private function buildAppearanceOverrideCss(): string
+    {
+        $map = [
+            'appearance_border_color' => '--rwd-border',
+            'appearance_ink_color'    => '--rwd-ink',
+            'appearance_head_color'   => '--rwd-head',
+            'appearance_label_color'  => '--rwd-label',
+            'appearance_card_radius'  => '--rwd-card-radius',
+            'appearance_card_shadow'  => '--rwd-card-shadow',
+        ];
+
+        $declarations = [];
+
+        foreach ($map as $param => $cssVar) {
+            $value = trim((string) $this->params->get($param, ''));
+
+            if ($value === '') {
+                continue;
+            }
+
+            // These fields are admin-only (same trust level as editing
+            // custom.css directly), but still strip characters that
+            // could break out of the declaration block or inject markup
+            // as a defense-in-depth measure, not because the value is
+            // treated as untrusted input.
+            $value = str_replace(['{', '}', '<', '>'], '', $value);
+
+            $declarations[] = $cssVar . ':' . $value . ';';
+        }
+
+        if (!$declarations) {
+            return '';
+        }
+
+        return ':root{' . implode('', $declarations) . '}';
     }
 }
