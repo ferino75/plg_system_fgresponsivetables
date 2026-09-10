@@ -192,6 +192,32 @@
     }
   }
 
+  /**
+   * For a table with class="rwd-truncate" (see the matching CSS):
+   * every cell's content is cut to one line with an ellipsis there,
+   * so the full value needs to still be reachable somehow — a native
+   * title attribute is the simplest way, works with mouse hover and
+   * keyboard focus, and needs no extra markup or JS elsewhere. Only
+   * sets it when the cell has no title already (an author-supplied
+   * one, however unlikely, is never overwritten), and only on TH/TD
+   * that don't already have one — safe to call on every enhance()
+   * pass, since a cell that already got one is simply skipped.
+   */
+  function applyTruncateTooltips(table) {
+    if (!table.classList.contains("rwd-truncate")) {
+      return;
+    }
+    ownCells(table).forEach(function (cell) {
+      if (cell.hasAttribute("title")) {
+        return;
+      }
+      var text = cleanText(cell.textContent);
+      if (text) {
+        cell.setAttribute("title", text);
+      }
+    });
+  }
+
 
   /**
    * Tracks an "occupied" grid across rows — same idea headerLabels()
@@ -573,6 +599,7 @@
       table.setAttribute("data-rwd-ready", "1");
 
       markHeaderRow(table);
+      applyTruncateTooltips(table);
 
       if (opts.autoLabels !== false) {
         applyLabels(table, opts.multiLevelLabels, opts.multiLevelSeparator);

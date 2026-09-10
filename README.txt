@@ -67,6 +67,15 @@ scrolovaní doprava:
 (rwd-sticky-col sa dá použiť aj samostatne, na akejkoľvek tabuľke,
 ktorá už scroluje, napr. cez nastavenie Minimálna šírka tabuľky.)
 
+Širokú tabuľku bez akéhokoľvek horizontálneho scrollovania — každá
+hodnota sa skráti na jeden riadok s "...", plná hodnota sa zobrazí
+po prejdení myšou (alebo pri prechádzaní klávesnicou):
+
+  <table class="responsiv rwd-truncate">...</table>
+
+(Na mobile sa aj tak normálne skladá do kariet — týka sa len
+nezloženého, širokého zobrazenia.)
+
 Pomocné triedy (zachované z pôvodného CSS, len v legacy.css)
 --------------------------------------------------------------
   sirka-25, sirka-30

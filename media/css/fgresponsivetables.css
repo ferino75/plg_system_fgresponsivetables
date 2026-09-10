@@ -216,6 +216,33 @@ table.responsiv.rwd-sticky-col:not(.is-stacked) tbody tr:hover td:first-child {
   background: var(--rwd-row-hover);
 }
 
+/* Opt-in per table: class="rwd-truncate" — an alternative to
+   horizontal scroll for a wide table with many columns. Instead of
+   overflowing sideways (rwd-scroll-only) or squeezing columns
+   unreadably, every cell's content is cut to one line with an
+   ellipsis, and JS sets the full value as a native title tooltip
+   (see wrapCellValues-adjacent code in the .js file) so nothing is
+   actually lost, just hidden until hovered/focused. table-layout:
+   fixed is required for max-width to actually constrain a column
+   instead of the browser just growing it to fit the untruncated
+   content anyway; with no per-column widths given, columns share the
+   table's width equally, which is a reasonable default without
+   knowing which columns need more room. Independent of
+   rwd-scroll-only — usable alone on a table that should still stack
+   normally on mobile, or combined with it. Only meaningful while not
+   stacked; a stacked card already wraps long values safely on their
+   own line. */
+table.responsiv.rwd-truncate:not(.is-stacked) {
+  table-layout: fixed;
+}
+
+table.responsiv.rwd-truncate:not(.is-stacked) th,
+table.responsiv.rwd-truncate:not(.is-stacked) td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 table.responsiv caption {
   font-size: 1.25em;
   font-weight: 600;

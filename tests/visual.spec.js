@@ -285,6 +285,50 @@ test.describe("rtl.html — dir=rtl support (v2.0.35)", () => {
   });
 });
 
+test.describe("scroll-only.html — rwd-truncate opt-in (v2.1.1)", () => {
+  test("a wide table with rwd-truncate has no horizontal overflow, and long cells get a title tooltip with the full value", async ({ page }) => {
+    await page.setViewportSize({ width: 700, height: 400 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const info = await page.evaluate(() => {
+      const wrap = document.getElementById("t-truncate").closest(".rwd-table-wrap");
+      const cells = document.querySelectorAll("#t-truncate tbody td");
+      return {
+        overflow: wrap.scrollWidth - wrap.clientWidth,
+        longCellTitle: cells[3].getAttribute("title"), // Kmenovy_utvar
+        shortCellTitle: cells[0].getAttribute("title"), // Os_Cislo
+      };
+    });
+    expect(info.overflow).toBeLessThanOrEqual(1);
+    expect(info.longCellTitle).toContain("Radioterapeutick");
+    expect(info.shortCellTitle).toBe("12345");
+  });
+
+  test("rwd-truncate still stacks into cards below the breakpoint (unlike rwd-scroll-only)", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 400 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const isStacked = await page.evaluate(() => {
+      const wrap = document.getElementById("t-truncate").closest(".rwd-table-wrap");
+      return wrap.classList.contains("is-stacked");
+    });
+    expect(isStacked).toBe(true);
+  });
+
+  test("an author-supplied title attribute is never overwritten", async ({ page }) => {
+    await page.goto(fixture("scroll-only.html"));
+    const result = await page.evaluate(() => {
+      const cell = document.querySelector("#t-truncate tbody td:nth-child(2)");
+      cell.setAttribute("title", "custom tooltip");
+      window.rwdTablesEnhance();
+      return cell.getAttribute("title");
+    });
+    expect(result).toBe("custom tooltip");
+  });
+});
+
 test.describe("rwdTables:enhanced custom event (v2.0.37)", () => {
   test("does not re-fire for already-enhanced tables on a repeated enhance() call", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 1200 });
