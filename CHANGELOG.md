@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.4
+- Changed the default (odd) row background to pure white (`--rwd-row`, `#f4f4f4` → `#ffffff`), superseding 2.1.3's lighter-gray attempt.
+
 ## 2.1.3
 - Follow-up to 2.1.2's darker header: the header background (`#d6dbe0`) ended up close enough to the table's border color (`#dddddd`) that the column-divider lines inside the header nearly disappeared. Added a dedicated `--rwd-head-border` variable (light `#a3acb5`, dark `#565d65`) applied specifically to header cells (desktop `<th>` and the stacked `tbody`/`tfoot` row-header block), so header dividers stay visible without changing the border color used everywhere else in the table.
 - Lightened `--rwd-row` (`#f8f8f8` → `#f4f4f4`) so the default (odd) row reads a touch more neutral against the now-more-prominent header, rather than competing with it. Kept the row's own `background-color` (briefly considered removing it entirely, reverted) since `rwd-sticky-col`'s sticky first cell explicitly reads this same variable — removing it there would have left the sticky column a visibly different shade from the rest of its own row once scrolled.
