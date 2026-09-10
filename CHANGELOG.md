@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.5
+- Darkened the light-mode row hover color (`--rwd-row-hover`, `#f1f1f1` → `#e6e6e6`), following 2.1.4's move to a pure white default row — the old hover shade barely stood out against white anymore.
+
 ## 2.1.4
 - Changed the default (odd) row background to pure white (`--rwd-row`, `#f4f4f4` → `#ffffff`), superseding 2.1.3's lighter-gray attempt.
 
