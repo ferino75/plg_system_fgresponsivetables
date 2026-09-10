@@ -359,3 +359,42 @@ test.describe("scroll-only.html — rwd-scroll-only opt-in (v2.0.36)", () => {
     expect(isStacked).toBe(true);
   });
 });
+
+test.describe("scroll-only.html — rwd-sticky-col opt-in (v2.1.0)", () => {
+  test("the first column stays at the wrap's left edge after scrolling horizontally", async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 400 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const before = await page.evaluate(() => {
+      const cell = document.querySelector("#t-report tbody td:first-child");
+      return getComputedStyle(cell).position;
+    });
+    expect(before).toBe("sticky");
+
+    const after = await page.evaluate(() => {
+      const wrap = document.getElementById("t-report").closest(".rwd-table-wrap");
+      wrap.scrollLeft = 300;
+      const cell = document.querySelector("#t-report tbody td:first-child");
+      return {
+        cellLeft: cell.getBoundingClientRect().left,
+        wrapLeft: wrap.getBoundingClientRect().left,
+        scrolled: wrap.scrollLeft,
+      };
+    });
+    expect(after.scrolled).toBeGreaterThan(0);
+    expect(Math.abs(after.cellLeft - after.wrapLeft)).toBeLessThan(1);
+  });
+
+  test("a table with rwd-scroll-only but no rwd-sticky-col is unaffected (first column scrolls normally)", async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 400 });
+    await page.goto(fixture("scroll-only.html"));
+    await page.waitForTimeout(250);
+
+    const position = await page.evaluate(() => {
+      const cell = document.querySelector("#t-matrix tbody td:first-child");
+      return getComputedStyle(cell).position;
+    });
+    expect(position).not.toBe("sticky");
+  });
+});

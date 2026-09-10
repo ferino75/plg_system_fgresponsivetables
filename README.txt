@@ -58,6 +58,15 @@ namiesto skladania bude horizontálne skrolovať:
 
   <table class="responsiv rwd-scroll-only">...</table>
 
+Širokú reportovú tabuľku (napr. výpis používateľov s mnohými
+stĺpcami), kde má prvý stĺpec (ID, meno) zostať viditeľný aj pri
+scrolovaní doprava:
+
+  <table class="responsiv rwd-scroll-only rwd-sticky-col">...</table>
+
+(rwd-sticky-col sa dá použiť aj samostatne, na akejkoľvek tabuľke,
+ktorá už scroluje, napr. cez nastavenie Minimálna šírka tabuľky.)
+
 Pomocné triedy (zachované z pôvodného CSS, len v legacy.css)
 --------------------------------------------------------------
   sirka-25, sirka-30

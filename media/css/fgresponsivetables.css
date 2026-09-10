@@ -183,6 +183,39 @@ table.responsiv.rwd-scroll-only td {
   white-space: nowrap;
 }
 
+/* Opt-in per table: class="rwd-sticky-col" (a wide report table —
+   many columns, where the first one or two identify the row, e.g.
+   an employee ID or name — so losing sight of it while scrolling
+   right to see the rest is disorienting). Freezes the first column
+   in place during horizontal scroll. Only meaningful while the table
+   isn't stacked — in card mode there's no horizontal scroll and
+   "first column" isn't a visual concept anymore, so this is scoped
+   to :not(.is-stacked). Each row state (header, zebra stripe, hover)
+   needs its own explicit background on the sticky cell — without an
+   opaque one matching its row, scrolled-past content shows through
+   underneath it. */
+table.responsiv.rwd-sticky-col:not(.is-stacked) th:first-child,
+table.responsiv.rwd-sticky-col:not(.is-stacked) td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--rwd-row);
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.08);
+}
+
+table.responsiv.rwd-sticky-col:not(.is-stacked) thead th:first-child {
+  z-index: 2;
+  background: var(--rwd-head);
+}
+
+table.responsiv.rwd-sticky-col:not(.is-stacked) tbody tr:nth-child(even) td:first-child {
+  background: var(--rwd-row-alt);
+}
+
+table.responsiv.rwd-sticky-col:not(.is-stacked) tbody tr:hover td:first-child {
+  background: var(--rwd-row-hover);
+}
+
 table.responsiv caption {
   font-size: 1.25em;
   font-weight: 600;
