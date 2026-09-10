@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.2
+- Darkened the default light-mode header background (`--rwd-head`, `#eaeaea` → `#d6dbe0`) — it was lighter than the table's own border color (`#dddddd`) and nearly indistinguishable from the (already very subtle) row stripes (`#f8f8f8`/`#f9f9f9`), so the header blended into the body instead of standing out. Dark mode's header color is unaffected. Sites that already set their own "Header background color" in the Appearance settings (v2.0.33) are unaffected either way, since that always overrides the built-in default.
+
 ## 2.1.1
 - Added a `rwd-truncate` opt-in class as an alternative to horizontal scrolling: every cell's content is cut to one line with an ellipsis instead of overflowing sideways, with the full value available via a native `title` tooltip (hover or keyboard focus). No scrollbar at all — the trade-off is needing to hover a truncated value to read it in full. Independent of `rwd-scroll-only`: a `rwd-truncate` table still stacks into cards normally below the breakpoint, only affecting the wide, non-stacked view.
 - `title` is set via the existing nested-table-safe `ownCells()` helper (not a deep `querySelectorAll`, which could reach into a nested table's own cells) and never overwrites an attribute already present — an author-supplied tooltip is left alone.
