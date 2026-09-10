@@ -3,6 +3,26 @@
 	<changelog>
 		<element>fgresponsivetables</element>
 		<type>plugin</type>
+		<version>2.1.1</version>
+		<fix>
+			<item>Added a rwd-truncate opt-in class as an alternative to horizontal scrolling: every cell's content is cut to one line with an ellipsis instead of overflowing sideways, with the full value available via a native title tooltip (hover or keyboard focus). No scrollbar at all, the trade-off is needing to hover a truncated value to read it in full. Independent of rwd-scroll-only: a rwd-truncate table still stacks into cards normally below the breakpoint, only affecting the wide, non-stacked view.</item>
+			<item>title is set via the existing nested-table-safe ownCells() helper (not a deep querySelectorAll, which could reach into a nested table's own cells) and never overwrites an attribute already present, an author-supplied tooltip is left alone.</item>
+			<item>Verified via headless render on the same real-world report-table shape as rwd-sticky-col: a 12-column table that previously needed horizontal scroll now measures zero overflow, a long cell (Kmenovy_utvar) gets a title with its full value, a short cell (Os_Cislo) does too, and the table still stacks into cards at a narrow viewport. A pre-set custom title on a cell survives re-running enhance(). Added as permanent Playwright regression tests.</item>
+		</fix>
+	</changelog>
+	<changelog>
+		<element>fgresponsivetables</element>
+		<type>plugin</type>
+		<version>2.1.0</version>
+		<fix>
+			<item>Added a rwd-sticky-col opt-in class: freezes the first column in place while scrolling a wide table horizontally, so you don't lose track of which row you're looking at (e.g. a user-rights report with 10+ columns, where the ID/name is in the first column). Combine with rwd-scroll-only, or use alone on any table that already scrolls (e.g. via the min-width setting). Real-world case: a com_fgreports output table using this plugin, cards on mobile as expected, but plain horizontal scroll on desktop with no way to tell which row you'd scrolled to.</item>
+			<item>Each row state (header, zebra stripe, hover) gets its own explicit background on the sticky cell, so scrolled-past content doesn't show through underneath it. Scoped to :not(.is-stacked), has no effect once a table is stacked into cards, where "first column" isn't a visual concept anymore.</item>
+			<item>Verified via headless render: the sticky cell reports position: sticky before scrolling, and after scrolling the wrap 300px horizontally, the cell's own left edge still measures within 1px of the wrap's left edge, a genuine pin, not just the CSS property being present. A table with rwd-scroll-only but no rwd-sticky-col is confirmed unaffected. Added as permanent Playwright regression tests.</item>
+		</fix>
+	</changelog>
+	<changelog>
+		<element>fgresponsivetables</element>
+		<type>plugin</type>
 		<version>2.0.39</version>
 		<fix>
 			<item>Added php_minimum7.4/php_minimum to updates.xml (a standard Joomla update-feed element, checked alongside targetplatform when Joomla decides whether to offer an update).</item>
