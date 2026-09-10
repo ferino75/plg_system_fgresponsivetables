@@ -15,12 +15,13 @@
 
 :root {
   --rwd-border: #dddddd;
-  --rwd-row: #f8f8f8;
+  --rwd-row: #f4f4f4;
   --rwd-row-alt: #f9f9f9;
   --rwd-row-hover: #f1f1f1;
   --rwd-card-alt: #eef1f4;
   --rwd-zebra: rgba(0, 0, 0, 0.035);
   --rwd-head: #d6dbe0;
+  --rwd-head-border: #a3acb5;
   --rwd-ink: #3e3e3e;
   --rwd-label: #1c1c1c;
   --rwd-accent-soft: #b2e9f0;
@@ -59,6 +60,7 @@
   --rwd-card-alt: #262b30;
   --rwd-zebra: rgba(255, 255, 255, 0.045);
   --rwd-head: #2c3136;
+  --rwd-head-border: #565d65;
   --rwd-ink: #d5d8db;
   --rwd-label: #f5f5f5;
   --rwd-accent-soft: #1f4850;
@@ -75,6 +77,7 @@
     --rwd-card-alt: #262b30;
     --rwd-zebra: rgba(255, 255, 255, 0.045);
     --rwd-head: #2c3136;
+    --rwd-head-border: #565d65;
     --rwd-ink: #d5d8db;
     --rwd-label: #f5f5f5;
     --rwd-accent-soft: #1f4850;
@@ -277,6 +280,7 @@ table.responsiv th {
   font-weight: 700;
   letter-spacing: 0.04em;
   background: var(--rwd-head);
+  border-color: var(--rwd-head-border);
 }
 
 /* Width helper classes (.sirka-25/.sirka-30, .col-w-md-*) moved to
@@ -420,7 +424,7 @@ table.responsiv.is-stacked tbody th,
 table.responsiv.is-stacked tfoot th {
   display: block;
   border: 0;
-  border-bottom: 1px solid var(--rwd-border);
+  border-bottom: 1px solid var(--rwd-head-border);
   background: var(--rwd-head);
   padding: 0.625em 0.75em;
   text-align: start;

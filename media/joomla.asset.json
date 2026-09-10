@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
   "name": "plg_system_fgresponsivetables",
-  "version": "2.1.2",
+  "version": "2.0.28",
   "description": "FG Responsive Tables for Joomla",
   "license": "GPL-2.0-or-later",
   "assets": [
